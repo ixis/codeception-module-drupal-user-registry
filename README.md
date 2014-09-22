@@ -5,13 +5,9 @@ A Codeception module for managing test users on Drupal sites.
 
 ## Install with Composer
 
+This module is available on [Packagist](https://packagist.org/packages/pfaocle/codeception-module-drupal-user-registry) and can be installed with Composer:
+
     {
-        "repositories": [
-            {
-                "type": "vcs",
-                "url": "https://github.com/pfaocle/codeception-module-drupal-user-registry.git"
-            }
-        ],
         "require": {
             "codeception/codeception": "2.0.*",
             "pfaocle/codeception-module-drupal-user-registry": "dev-master"
