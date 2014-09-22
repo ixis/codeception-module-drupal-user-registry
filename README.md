@@ -14,6 +14,7 @@ This module is available on [Packagist](https://packagist.org/packages/pfaocle/c
         }
     }
 
+Drupal User Registry minimally requires Codeception 2.0 and PHP 5.4
 
 ## Example suite configuration
 
