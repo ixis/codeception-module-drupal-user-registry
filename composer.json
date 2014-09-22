@@ -1,0 +1,22 @@
+{
+    "name": "pfaocle/codeception-module-drupal-user-registry",
+    "description": "A Codeception module for managing test users.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Paul Byrne",
+            "email": "code@pfaocle.co.uk",
+            "homepage": "http://pfaocle.co.uk/"
+        }
+    ],
+
+    "require": {
+        "php": ">=5.4.0"
+    },
+
+    "autoload": {
+        "psr-4": {
+            "Codeception\\Module\\": "src"
+        }
+    }
+}

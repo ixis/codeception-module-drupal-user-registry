@@ -1,0 +1,5 @@
+; .gitignore for Drupal User Registry Codeception module.
+
+; Composer
+vendor
+composer.lock
