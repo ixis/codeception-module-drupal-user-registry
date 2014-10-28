@@ -35,6 +35,15 @@ Drupal User Registry minimally requires Codeception 2.0 and PHP 5.4
                 drush-alias: '@mysite.local' # The Drush alias to use when managing users via DrushTestUserManager.
 
 
+## Creating or deleting users using the command line
+
+    vendor/pfaocle/codeception-module-drupal-user-registry/test-users users:create
+
+or
+
+    vendor/pfaocle/codeception-module-drupal-user-registry/test-users users:delete
+
+
 ## Acknowledgements
 
 Props to [Andy Rigby](https://github.com/ixisandyr) for the storage code and inspiration.
