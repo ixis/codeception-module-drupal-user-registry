@@ -45,6 +45,11 @@ class DrupalUserRegistry extends Module
     const DRUPAL_ROOT_USER_USERNAME = 'root';
 
     /**
+     * Domain to use to generate email addresses for users.
+     */
+    const DRUPAL_USER_EMAIL_DOMAIN = 'example.com';
+
+    /**
      * @var array
      *   Optional configuration with default values.
      */

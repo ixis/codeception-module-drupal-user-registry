@@ -5,6 +5,7 @@ namespace Codeception\Module\Drupal\UserRegistry;
 use Codeception\Exception\Configuration as ConfigurationException;
 use Codeception\Lib\Console\Message;
 use Codeception\Lib\Console\Output;
+use Codeception\Module\DrupalUserRegistry;
 use Codeception\Util\Debug;
 
 /**
@@ -57,7 +58,7 @@ class DrushTestUserManager implements TestUserManagerInterface
                 sprintf(
                     "user-create %s --mail=%s --password=%s",
                     escapeshellarg($user->name),
-                    escapeshellarg("{$user->name}@example.com"),
+                    escapeshellarg($user->name . "@" . DrupalUserRegistry::DRUPAL_USER_EMAIL_DOMAIN),
                     escapeshellarg($user->pass)
                 )
             );
