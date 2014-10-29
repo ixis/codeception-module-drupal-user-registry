@@ -1,6 +1,7 @@
 <?php
 
 namespace Codeception\Module\Drupal\UserRegistry;
+use Codeception\Module\Drupal\UserRegistry\Storage\StorageInterface;
 
 /**
  * Interface TestUserManagerInterface.
@@ -9,6 +10,22 @@ namespace Codeception\Module\Drupal\UserRegistry;
  */
 interface TestUserManagerInterface
 {
+    /**
+     * Gets the storage object.
+     *
+     * @return StorageInterface
+     *   The Storage object currently set.
+     */
+    public function getStorage();
+
+    /**
+     * Set the storage object.
+     *
+     * @param StorageInterface $storage
+     *   The Storage object to set.
+     */
+    public function setStorage(StorageInterface $storage);
+
     /**
      * Create a test user.
      *
