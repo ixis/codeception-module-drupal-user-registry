@@ -64,7 +64,11 @@ modules:
             drush-alias: '@mysite.local' # The Drush alias to use when managing users via DrushTestUserManager.
 ```
 
-Configuration values for `roles`, `password` and `drush-alias` are all required. `create` and `delete` are optional and are assumed to be `false` if not set.
+### Required configuration
+
+* Configuration values for `roles` and `password` are required.
+* `drush-alias` is only currently required as [DrushTestUserManager](https://github.com/pfaocle/codeception-module-drupal-user-registry/blob/master/src/Drupal/UserRegistry/DrushTestUserManager.php) is the only class available for managing (creating/deleting) users.
+* `create` and `delete` are optional and are assumed to be `false` if not set.
 
 ### Derivate usernames
 
