@@ -25,7 +25,7 @@ $user = $I->getUser($userName);
 $roles = $I->getRoles();
 ```
 
-The **DrupalTestUser** class is a very minimal representation of a Drupal user account and can be used as part of a login procedure defined in, for example, a StepObject or PageObject.
+The [DrupalTestUser](https://github.com/pfaocle/codeception-module-drupal-user-registry/blob/master/src/Drupal/UserRegistry/DrupalTestUser.php) class is a very minimal representation of a Drupal user account and can be used as part of a login procedure defined in, for example, a StepObject or PageObject.
 
 
 ## Install with Composer
