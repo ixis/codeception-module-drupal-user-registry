@@ -64,7 +64,11 @@ modules:
             drush-alias: '@mysite.local' # The Drush alias to use when managing users via DrushTestUserManager.
 ```
 
-**Note** that only a list of user roles is defined - no specific usernames. This is because we only need a single representative user account for a given role performing an acceptance test. Each role defined in configuration maps directly to a single user with username derived from the role name. For example, the configuration above would result in the following usernames: _test.administrator_, _test.editor_, _test.sub.editor_, _test.lowly.user_, _test.authenticated_.
+Configuration values for `roles`, `password` and `drush-alias` are all required. `create` and `delete` are optional and are assumed to be `false` if not set.
+
+### Derivate usernames
+
+Note that only a list of user roles is defined - no specific usernames. This is because we only need a single representative user account for a given role performing an acceptance test. Each role defined in configuration maps directly to a single user with username derived from the role name. For example, the configuration above would result in the following usernames: _test.administrator_, _test.editor_, _test.sub.editor_, _test.lowly.user_, _test.authenticated_.
 
 The derivative usernames are always prefixed with _test._ and have any character in the role name matching the regex `/(\s|-)/` (i.e. whitespace and hyphens) replaced with a full-stop character (`.`).
 
