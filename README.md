@@ -69,6 +69,33 @@ modules:
 The derivative usernames are always prefixed with _test._ and have any character in the role name matching the regex `/(\s|-)/` (i.e. whitespace and hyphens) replaced with a full-stop character (`.`).
 
 
+## Troubleshooting
+
+The module provides more verbose output when used with Codeception's `--debug` option. For example:
+
+    $ vendor/bin/codecept run --debug
+
+    [Drupal User Registry] Creating test users.
+      Trying to create test user 'test.administrator' on '@mysite.local'.
+      drush -y '@mysite.local' user-information 'test.administrator'
+    Creating test user 'test.administrator' on '@mysite.local'.
+      drush -y '@mysite.local' user-create 'test.administrator' --mail='test.administrator@example.com' --password='test123!'
+      drush -y '@mysite.local' user-add-role 'administrator' --name='test.administrator'
+      Trying to create test user 'test.editor' on '@mysite.local'.
+      drush -y '@mysite.local' user-information 'test.editor'
+    Creating test user 'test.editor' on '@mysite.local'.
+      drush -y '@mysite.local' user-create 'test.editor' --mail='test.editor@example.com' --password='test123!'
+      drush -y '@mysite.local' user-add-role 'editor' --name='test.editor'
+    ...
+    (Tests.)
+    ...
+      [Drupal User Registry] Deleting test users.
+    Deleting test user test.administrator on @mysite.local.
+      drush -y '@mysite.local' user-cancel test.administrator --delete-content
+    Deleting test user test.editor on @mysite.local.
+      drush -y '@mysite.local' user-cancel test.editor --delete-content
+    ...
+
 ## Acknowledgements
 
 Props to [Andy Rigby](https://github.com/ixisandyr) for the storage code and inspiration.
