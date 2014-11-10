@@ -2,6 +2,7 @@
 
 namespace Codeception\Module;
 
+use Codeception\Exception\Module as ModuleException;
 use Codeception\Module;
 use Codeception\Module\Drupal\UserRegistry\DrupalTestUser;
 use Codeception\Module\Drupal\UserRegistry\DrushTestUserManager;
@@ -141,6 +142,25 @@ class DrupalUserRegistry extends Module
             unset($roles[self::DRUPAL_ROOT_USER_USERNAME]);
         }
         return array_keys($roles);
+    }
+
+    /**
+     * Get the "root" user with  uid 1, if configured.
+     *
+     * @return DrupalTestUser
+     *   The configured "root" user.
+     *
+     * @throws ModuleException
+     */
+    public function getRootUser()
+    {
+        if (!isset($this->config['root']['username']) || !isset($this->config['root']['password'])) {
+            throw new ModuleException(
+                __CLASS__,
+                "Credentials for the root user (username, password) are not configured."
+            );
+        }
+        return new DrupalTestUser($this->config['root']['username'], $this->config['root']['password']);
     }
 
     /**
