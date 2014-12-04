@@ -30,6 +30,8 @@ $rootUser = $I->getRootUser();
 
 The [DrupalTestUser](https://github.com/pfaocle/codeception-module-drupal-user-registry/blob/master/src/Drupal/UserRegistry/DrupalTestUser.php) class is a very minimal representation of a Drupal user account and can be used as part of a login procedure defined in, for example, a StepObject or PageObject.
 
+This module currently uses Drush and Drush aliases to create, delete and add roles to user accounts. Note that the `--delete-content` option is used when deleting users, so any content created by that user account will also be removed.
+
 
 ## Install with Composer
 
@@ -112,6 +114,7 @@ The module provides more verbose output when used with Codeception's `--debug` o
     Deleting test user test.editor on @mysite.local.
       drush -y '@mysite.local' user-cancel test.editor --delete-content
     ...
+
 
 ## Acknowledgements
 
