@@ -37,11 +37,13 @@ Drupal User Registry minimally requires Codeception 2.0 and PHP 5.4
 
 ## Creating or deleting users using the command line
 
-    vendor/pfaocle/codeception-module-drupal-user-registry/test-users users:create
+Once this module is installed in a Codeception test suite the following commands can be used to create and delete test users (from the root of the test suite):
 
-or
+    # Create test users for all defined roles.
+    vendor/bin/drupal-user-registry users:create
 
-    vendor/pfaocle/codeception-module-drupal-user-registry/test-users users:delete
+    # Delete test users for all defined roles.
+    vendor/bin/drupal-user-registry users:delete
 
 
 ## Acknowledgements
