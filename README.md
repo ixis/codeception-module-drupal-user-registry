@@ -45,6 +45,14 @@ Once this module is installed in a Codeception test suite the following commands
     # Delete test users for all defined roles.
     vendor/bin/drupal-user-registry users:delete
 
+These commands will default to using the **acceptance** suite to determine the alias on which Drush will run from the suite's configuration. To run the commands using a suite other than **acceptance**, pass the suite name as an argument:
+
+    # Create test users for all defined roles in the front-end suite configuration.
+    vendor/bin/drupal-user-registry users:create front-end
+
+    # Delete test users for all defined roles in the front-end suite configuration.
+    vendor/bin/drupal-user-registry users:delete front-end
+
 
 ## Acknowledgements
 
