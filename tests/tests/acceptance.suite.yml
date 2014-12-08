@@ -1,0 +1,24 @@
+# Codeception Test Suite Configuration
+
+# suite for acceptance tests.
+# perform tests in browser using the WebDriver or PhpBrowser.
+# If you need both WebDriver and PHPBrowser tests - create a separate suite.
+
+class_name: AcceptanceTester
+modules:
+    enabled:
+        - PhpBrowser
+        - AcceptanceHelper
+        - DrupalUserRegistry
+    config:
+        PhpBrowser:
+            url: 'http://d7.drupal.dev:8080/'
+        DrupalUserRegistry:
+            roles: ['administrator', 'editor', 'moderator', 'Authenticated']
+            password: 'test123!'
+            create: true
+            delete: true
+            drush-alias: '@d7.local'
+            root:
+              username: root
+              password: root

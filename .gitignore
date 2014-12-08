@@ -3,3 +3,6 @@
 ; Composer
 vendor
 composer.lock
+
+; Test suite
+tests/tests/*/*Tester.php
