@@ -3,6 +3,8 @@ Drupal User Registry
 
 ## A Codeception module for managing test users
 
+[![Build Status](https://travis-ci.org/pfaocle/codeception-module-drupal-user-registry.svg?branch=feature/add-tests)](https://travis-ci.org/pfaocle/codeception-module-drupal-user-registry)
+
 _Drupal User Registry_ is a [Codeception module](http://codeception.com/addons) for managing test users on [Drupal](https://www.drupal.org/) sites. It can be configured to automatically create users before and delete users after a suite run.
 
 It also allows the use of the following statements in tests:
