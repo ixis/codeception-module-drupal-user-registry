@@ -15,6 +15,7 @@ branches:
 before_script:
   - composer self-update
   - cd tests && composer install
+  - vendor/bin/codecept build
 
 # Run tests.
 script:
