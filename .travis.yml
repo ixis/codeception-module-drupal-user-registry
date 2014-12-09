@@ -20,10 +20,8 @@ before_script:
   - vendor/bin/codecept build
 
   # Ensure the test suite is using the module repository at the top level (instead of the Composer-installed version).
-  - cd vendor/pfaocle
-  - rm -Rf codeception-module-drupal-user-registry
-  - ln -s ../../../../codeception-module-drupal-user-registry
-  - cd ../..
+  - rm -Rf vendor/pfaocle/codeception-module-drupal-user-registry
+  - ln -s ../../../../codeception-module-drupal-user-registry vendor/pfaocle/
 
   # Rebuild *Tester classes, just in case anything has changed in the public methods Drupal User Registry provides.
   - vendor/bin/codecept build
