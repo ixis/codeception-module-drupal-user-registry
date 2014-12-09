@@ -3,3 +3,6 @@
 ; Composer
 vendor
 composer.lock
+
+; Ignore generated documentation (for now).
+docs
