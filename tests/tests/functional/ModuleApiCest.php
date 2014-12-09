@@ -43,4 +43,26 @@ class ModuleApiCest
         );
         \PHPUnit_Framework_Assert::assertNull($rootUser->roleName, "Role name was not null.");
     }
+
+    /**
+     * Test that the result from getLoggedInUser() is what we expect after setting it with setLoggedInUser().
+     *
+     * @param FunctionalTester $I
+     *   Actor object being used to test.
+     * @param Scenario $scenario
+     *   The running scenario, used to skip this test.
+     */
+    public function testSetAndGetLoggedInUser(FunctionalTester $I, Scenario $scenario)
+    {
+        $scenario->skip("functionality is not yet merged");
+
+        $roleToUse = "administrator";
+
+        $I->amGoingTo("set, get then compare the module stored logged in user");
+        $user = $I->getUserByRole($roleToUse);
+        $I->setLoggedInUser($user);
+        $loggedInUser = $I->getLoggedInUser();
+
+        \PHPUnit_Framework_Assert::assertEquals($user, $loggedInUser, "User objects did not match.");
+    }
 }
