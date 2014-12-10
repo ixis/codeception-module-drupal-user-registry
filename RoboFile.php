@@ -50,8 +50,8 @@ class RoboFile extends \Robo\Tasks
         // Still have to build the *Tester classes if we've just checked out.
         $this->taskExec("cd tests && vendor/bin/codecept build && cd -")->run();
 
-        $this->taskCodecept("tests/vendor/bin/codecept")
-            ->option("config", self::TESTS_DIR . "/tests/codeception.yml")
+        $this->taskCodecept(self::TESTS_DIR . DIRECTORY_SEPARATOR . "vendor/bin/codecept")
+            ->option("config", self::TESTS_DIR  . DIRECTORY_SEPARATOR . "codeception.yml")
             ->suite("functional")
             ->run();
     }
