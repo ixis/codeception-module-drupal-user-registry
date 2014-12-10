@@ -34,17 +34,9 @@ class ModuleApiCest
         $rootUser = $I->getRootUser();
 
         $I->amGoingTo("check the returned data is as expected");
-        \PHPUnit_Framework_Assert::assertEquals(
-            $moduleRootUserConfig["username"],
-            $rootUser->name,
-            "Usernames did not match."
-        );
-        \PHPUnit_Framework_Assert::assertEquals(
-            $moduleRootUserConfig["password"],
-            $rootUser->pass,
-            "Passwords did not match."
-        );
-        \PHPUnit_Framework_Assert::assertNull($rootUser->roleName, "Role name was not null.");
+        $I->assertEquals($moduleRootUserConfig["username"], $rootUser->name, "Usernames did not match.");
+        $I->assertEquals($moduleRootUserConfig["password"], $rootUser->pass, "Passwords did not match.");
+        $I->assertNull($rootUser->roleName, "Role name was not null.");
     }
 
     /**
@@ -61,8 +53,7 @@ class ModuleApiCest
         $user = $I->getUserByRole($roleToUse);
         $I->setLoggedInUser($user);
         $loggedInUser = $I->getLoggedInUser();
-
-        \PHPUnit_Framework_Assert::assertEquals($user, $loggedInUser, "User objects did not match.");
+        $I->assertEquals($user, $loggedInUser, "User objects did not match.");
     }
 
     /**
@@ -78,10 +69,6 @@ class ModuleApiCest
 
         $I->removeLoggedInUser();
         $I->expect("value returned from getLoggedInUser to be null");
-        \PHPUnit_Framework_Assert::assertEquals(
-            null,
-            $I->getLoggedInUser(),
-            "Value returned form getLoggedInUser() was not null."
-        );
+        $I->assertNull($I->getLoggedInUser(), "Value returned form getLoggedInUser() was not null.");
     }
 }
