@@ -49,13 +49,9 @@ class ModuleApiCest
      *
      * @param FunctionalTester $I
      *   Actor object being used to test.
-     * @param Scenario $scenario
-     *   The running scenario, used to skip this test.
      */
-    public function testSetAndGetLoggedInUser(FunctionalTester $I, Scenario $scenario)
+    public function testSetAndGetLoggedInUser(FunctionalTester $I)
     {
-        $scenario->skip("functionality is not yet merged");
-
         $roleToUse = "administrator";
 
         $I->amGoingTo("set, get then compare the module stored logged in user");
