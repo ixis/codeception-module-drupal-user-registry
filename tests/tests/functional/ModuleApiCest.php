@@ -61,4 +61,21 @@ class ModuleApiCest
 
         \PHPUnit_Framework_Assert::assertEquals($user, $loggedInUser, "User objects did not match.");
     }
+
+    /**
+     * Test that the returned result from getLoggedInUser() is null after calling removeLoggedInUser().
+     *
+     * @param FunctionalTester $I
+     *   Actor object being used to test.
+     */
+    public function testRemoveLoggedInUser(FunctionalTester $I)
+    {
+        $I->removeLoggedInUser();
+        $I->expect("value returned from getLoggedInUser to be null");
+        \PHPUnit_Framework_Assert::assertEquals(
+            null,
+            $I->getLoggedInUser(),
+            "Value returned form getLoggedInUser() was not null."
+        );
+    }
 }
