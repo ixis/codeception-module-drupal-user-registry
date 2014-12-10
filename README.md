@@ -8,12 +8,14 @@ _Drupal User Registry_ is a [Codeception module](http://codeception.com/addons) 
 It also allows the use of the following statements in tests:
 
 ```php
-// Returns a DrupalTestUser object representing the test user available for this role.
+// Returns a DrupalTestUser object representing the test user available for
+// this role.
 $user = $I->getUserByRole($roleName);
 
-// Returns a DrupalTestUser object representing the user, or false if no users were found. Note this will only
-// return a user defined and managed by this module, it will not return information about arbitrary accounts
-// on the site being tested.
+// Returns a DrupalTestUser object representing the user, or false if no users
+// were found. Note this will only return a user defined and managed by this
+// module, it will not return information about arbitrary accounts on the site
+// being tested.
 $user = $I->getUser($userName);
 
 // Returns an indexed array of configured roles, for example:
@@ -24,7 +26,8 @@ $user = $I->getUser($userName);
 //   );
 $roles = $I->getRoles();
 
-// Returns a DrupalTestUser object representing the "root" user (account with uid 1), if credentials are configured:
+// Returns a DrupalTestUser object representing the "root" user (account with
+// uid 1), if credentials are configured:
 $rootUser = $I->getRootUser();
 ```
 
