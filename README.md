@@ -24,7 +24,7 @@ $user = $I->getUser($userName);
 //   );
 $roles = $I->getRoles();
 
-/// Returns a DrupalTestUser object representing the "root" user (account with uid 1), if credentials are configured:
+// Returns a DrupalTestUser object representing the "root" user (account with uid 1), if credentials are configured:
 $rootUser = $I->getRootUser();
 ```
 
