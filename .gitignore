@@ -6,3 +6,6 @@ composer.lock
 
 ; Test suite
 tests/tests/*/*Tester.php
+
+; Ignore generated documentation (for now).
+docs
