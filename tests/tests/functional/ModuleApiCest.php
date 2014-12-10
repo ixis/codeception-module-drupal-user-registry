@@ -17,8 +17,11 @@ class ModuleApiCest
      * @param FunctionalTester $I
      *   Actor object being used to test.
      */
-    public function testRootUser(FunctionalTester $I)
+    public function testGetRootUser(FunctionalTester $I)
     {
+        // Describe this test, overriding the name Codeception generates from the method name.
+        $I->wantTo("test getLoggedInUser()");
+
         $I->amGoingTo("get root user from loaded configuration");
         $config = \Codeception\Configuration::suiteSettings("acceptance", \Codeception\Configuration::config());
 
@@ -54,7 +57,7 @@ class ModuleApiCest
     {
         $roleToUse = "administrator";
 
-        $I->amGoingTo("set, get then compare the module stored logged in user");
+        $I->amGoingTo("set, get then compare the logged in user stored by the module against that originally set");
         $user = $I->getUserByRole($roleToUse);
         $I->setLoggedInUser($user);
         $loggedInUser = $I->getLoggedInUser();
@@ -70,6 +73,9 @@ class ModuleApiCest
      */
     public function testRemoveLoggedInUser(FunctionalTester $I)
     {
+        // Describe this test, overriding the name Codeception generates from the method name.
+        $I->wantTo("test removeLoggedInUser()");
+
         $I->removeLoggedInUser();
         $I->expect("value returned from getLoggedInUser to be null");
         \PHPUnit_Framework_Assert::assertEquals(
