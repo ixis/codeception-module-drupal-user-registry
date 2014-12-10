@@ -28,4 +28,5 @@ before_script:
 
 # Run tests.
 script:
+  - vendor/bin/codecept run unit --debug
   - vendor/bin/codecept run functional --group=api --debug

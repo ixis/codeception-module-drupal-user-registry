@@ -1,0 +1,6 @@
+#
+# Configuration for Drupal User Registry unit tests.
+#
+class_name: UnitTester
+modules:
+    enabled: [UnitHelper]
