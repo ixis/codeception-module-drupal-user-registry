@@ -75,6 +75,13 @@ class DrupalUserRegistry extends Module
     protected $drupalTestUsers = [];
 
     /**
+     * A reference to the user who is currently logged in, if there is one.
+     *
+     * @var DrupalTestUser
+     */
+    protected $loggedInUser;
+
+    /**
      * Initialize the module. Check for required configuration then load users.
      */
     public function _initialize()
@@ -207,5 +214,33 @@ class DrupalUserRegistry extends Module
             $fn = "{$op}Users";
             $this->testUserManager->$fn($this->drupalTestUsers);
         }
+    }
+
+    /**
+     * Gets the user who is currently logged in, or null if there isn't one.
+     *
+     * @return DrupalTestUser|null
+     */
+    public function getLoggedInUser()
+    {
+        return $this->loggedInUser;
+    }
+
+    /**
+     * Sets the user who is currently logged in.
+     *
+     * @param DrupalTestUser $person
+     */
+    public function setLoggedInUser($person)
+    {
+        $this->loggedInUser = $person;
+    }
+
+    /**
+     * Removes the currently logged in user, if there is one, and sets it back to null.
+     */
+    public function removeLoggedInUser()
+    {
+        $this->loggedInUser = null;
     }
 }
