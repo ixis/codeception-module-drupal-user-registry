@@ -70,4 +70,20 @@ class RoboFile extends \Robo\Tasks
             ->suite("functional")
             ->run();
     }
+
+    /**
+     * Ensure the test suite is using the module repository at the top level (instead of the Composer-installed
+     * version).
+     */
+    public function utilSymlinkModule()
+    {
+        $this->taskExecStack()
+            ->stopOnFail()
+            ->exec("cd " . self::TESTS_DIR . " && rm -Rf vendor/pfaocle/codeception-module-drupal-user-registry")
+            ->exec(
+                "cd " . self::TESTS_DIR .
+                " && ln -s ../../../../codeception-module-drupal-user-registry vendor/pfaocle/"
+            )
+            ->run();
+    }
 }
