@@ -26,6 +26,12 @@ class RoboFile extends \Robo\Tasks
     const TESTS_DIR = "tests";
 
     /**
+     * @type string
+     *   Path to Codeception.
+     */
+    const CODECEPTION_PATH = "vendor/bin/codecept";
+
+    /**
      * Generate PhpDocumentator files.
      */
     public function docsGenerate()
@@ -43,14 +49,23 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
+     * Build Codeception's auto-generated files.
+     */
+    public function testsBuild()
+    {
+        $this->taskExec(sprintf("cd %s && %s build && cd -", self::TESTS_DIR, self::CODECEPTION_PATH))
+            ->run();
+    }
+
+    /**
      * Run (functional) tests.
      */
     public function testsRun()
     {
         // Still have to build the *Tester classes if we've just checked out.
-        $this->taskExec("cd tests && vendor/bin/codecept build && cd -")->run();
+        $this->testsBuild();
 
-        $this->taskCodecept(self::TESTS_DIR . DIRECTORY_SEPARATOR . "vendor/bin/codecept")
+        $this->taskCodecept(self::TESTS_DIR . DIRECTORY_SEPARATOR . self::CODECEPTION_PATH)
             ->option("config", self::TESTS_DIR  . DIRECTORY_SEPARATOR . "codeception.yml")
             ->suite("functional")
             ->run();
