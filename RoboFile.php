@@ -26,6 +26,20 @@ class RoboFile extends \Robo\Tasks
     const TESTS_DIR = "tests";
 
     /**
+     * Run PHP_CodeSniffer standards checks.
+     */
+    public function cleanupPhpcs()
+    {
+        $directories = [self::SRC_DIR, self::TESTS_DIR . "/tests"];
+
+        foreach ($directories as $directory) {
+            $this->taskExec("phpcs --standard=PSR2 " . self::SRC_DIR)
+                ->printed(false)
+                ->run();
+        }
+    }
+
+    /**
      * Generate PhpDocumentator files.
      */
     public function docsGenerate()
