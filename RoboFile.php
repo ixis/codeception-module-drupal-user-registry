@@ -39,7 +39,7 @@ class RoboFile extends \Robo\Tasks
         $directories = [self::SRC_DIR, self::TESTS_DIR . "/tests"];
 
         foreach ($directories as $directory) {
-            $this->taskExec("phpcs --standard=PSR2 " . self::SRC_DIR)
+            $this->taskExec("phpcs --standard=PSR2 " . $directory)
                 ->printed(false)
                 ->run();
         }
