@@ -29,6 +29,14 @@ $roles = $I->getRoles();
 // Returns a DrupalTestUser object representing the "root" user (account with
 // uid 1), if credentials are configured:
 $rootUser = $I->getRootUser();
+
+// Also provided are a few utility methods that can be used in tests to
+// store and retrieve a DrupalTestUser object representing the logged in user.
+// Note these methods don't actually log a user in or out - that currently
+// needs to be handled elsewhere.
+$I->setLoggedInUser($I->getUserByRole('administrator');
+$I->getLoggedInUser();
+$I->removeLoggedInUser();
 ```
 
 All methods available to the Actor object `$I` are defined in this module's [public API](https://github.com/pfaocle/codeception-module-drupal-user-registry/blob/master/API.md).
