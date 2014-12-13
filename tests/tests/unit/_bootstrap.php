@@ -4,6 +4,7 @@
  */
 
 use \Codeception\Util\Fixtures;
+use \Codeception\Module\Drupal\UserRegistry\DrupalTestUser;
 
 // Define a complete, valid configuration identical to that configured in the functional suite.
 $mockValidModuleConfig = array(
@@ -34,8 +35,5 @@ Fixtures::add("validModuleConfig", $mockValidModuleConfig);
 Fixtures::add("invalidModuleConfig", $mockInvalidModuleConfig);
 
 // Define a mock test user.
-$drupalTestUser = new stdClass();
-$drupalTestUser->name = "test.mock.user";
-$drupalTestUser->pass = "password";
-$drupalTestUser->roleName = "mock";
+$drupalTestUser = new DrupalTestUser("test.mock.user", "password", "mock");
 Fixtures::add("drupalTestUser", $drupalTestUser);
