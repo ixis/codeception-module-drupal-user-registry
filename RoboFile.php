@@ -36,7 +36,7 @@ class RoboFile extends \Robo\Tasks
      */
     public function cleanupPhpcs()
     {
-        $directories = [self::SRC_DIR, self::TESTS_DIR . "/tests"];
+        $directories = [self::SRC_DIR, self::TESTS_DIR];
 
         foreach ($directories as $directory) {
             $this->taskExec("phpcs --standard=PSR2 " . $directory)
@@ -67,8 +67,7 @@ class RoboFile extends \Robo\Tasks
      */
     public function testsBuild()
     {
-        $this->taskExec(sprintf("cd %s && %s build && cd -", self::TESTS_DIR, self::CODECEPTION_PATH))
-            ->run();
+        $this->taskExec(sprintf("%s build", self::CODECEPTION_PATH))->run();
     }
 
     /**
@@ -80,26 +79,10 @@ class RoboFile extends \Robo\Tasks
         $this->testsBuild();
 
         foreach (["unit", "acceptance"] as $suite) {
-            $this->taskCodecept(self::TESTS_DIR . DIRECTORY_SEPARATOR . self::CODECEPTION_PATH)
-                ->option("config", self::TESTS_DIR  . DIRECTORY_SEPARATOR . "codeception.yml")
+            $this->taskCodecept(self::CODECEPTION_PATH)
+                ->option("config", "codeception.yml")
                 ->suite($suite)
                 ->run();
         }
-    }
-
-    /**
-     * Ensure the test suite is using the module repository at the top level (instead of the Composer-installed
-     * version).
-     */
-    public function utilSymlinkModule()
-    {
-        $this->taskExecStack()
-            ->stopOnFail()
-            ->exec("cd " . self::TESTS_DIR . " && rm -Rf vendor/pfaocle/codeception-module-drupal-user-registry")
-            ->exec(
-                "cd " . self::TESTS_DIR .
-                " && ln -s ../../../../codeception-module-drupal-user-registry vendor/pfaocle/"
-            )
-            ->run();
     }
 }
