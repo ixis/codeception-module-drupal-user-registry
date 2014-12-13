@@ -79,7 +79,7 @@ class RoboFile extends \Robo\Tasks
         // Still have to build the *Tester classes if we've just checked out.
         $this->testsBuild();
 
-        foreach (["unit", "functional"] as $suite) {
+        foreach (["unit", "acceptance"] as $suite) {
             $this->taskCodecept(self::TESTS_DIR . DIRECTORY_SEPARATOR . self::CODECEPTION_PATH)
                 ->option("config", self::TESTS_DIR  . DIRECTORY_SEPARATOR . "codeception.yml")
                 ->suite($suite)
