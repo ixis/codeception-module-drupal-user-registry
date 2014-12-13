@@ -44,7 +44,7 @@ class ConfigurationTest extends \Codeception\TestCase\Test
         $config = \Codeception\Configuration::suiteSettings("unit", \Codeception\Configuration::config());
 
         if (!isset($config["modules"]["config"]["DrupalUserRegistry"]["root"])) {
-            \PHPUnit_Framework_Assert::fail("Root user configuration is not set.");
+            $this->fail("Root user configuration is not set.");
         }
         $moduleRootUserConfig = $config["modules"]["config"]["DrupalUserRegistry"]["root"];
 
