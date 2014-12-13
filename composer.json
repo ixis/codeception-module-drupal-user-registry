@@ -16,8 +16,7 @@
 
     "require-dev": {
         "codeception/codeception": "~2.0.8",
-        "codegyre/robo": "~0.4.6",
-        "pfaocle/codeception-module-drupal-user-registry": "dev-master"
+        "codegyre/robo": "~0.4.6"
     },
 
     "autoload": {
