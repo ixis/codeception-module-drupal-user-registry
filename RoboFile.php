@@ -85,4 +85,20 @@ class RoboFile extends \Robo\Tasks
                 ->run();
         }
     }
+
+    /**
+     * Run CodeCoverage.
+     */
+    public function testsCoverage()
+    {
+        // Unable to use taskCodecept() here as "Executing vendor/bin/codecept run --coverage-html unit" actually runs
+        // the acceptance suite too. The syntax below (with suite before options) seems to work:
+        //
+//        $this->taskCodecept(self::CODECEPTION_PATH)
+//            ->suite("unit")
+//            ->option("coverage-html")
+//            ->run();
+        // @todo Investigate and submit issue.
+        $this->taskExec(self::CODECEPTION_PATH . " run unit --coverage-html")->run();
+    }
 }
