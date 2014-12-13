@@ -35,6 +35,7 @@ class ConfigurationTest extends \Codeception\TestCase\Test
      *
      * @test
      * @group api
+     * @group config
      */
     public function testGetRootUserFromConfiguration()
     {
