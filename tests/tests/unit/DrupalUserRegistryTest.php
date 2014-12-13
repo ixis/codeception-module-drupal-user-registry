@@ -77,6 +77,25 @@ class DrupalUserRegistryTest extends \Codeception\TestCase\Test
     }
 
     /**
+     * Test getUser()
+     *
+     * @test
+     * @group api
+     */
+    public function testGetUser()
+    {
+        $this->initialise();
+
+        $expected = new DrupalTestUser("test.administrator", "test123!", "administrator");
+        $this->assertTestUsersEqual($expected, $this->module->getUser("test.administrator"));
+
+        $this->assertFalse(
+            $this->module->getUser("invalid.test.user"),
+            "Result from getUser() was not false when requesting an invalid test user."
+        );
+    }
+
+    /**
      * Test getUserByRole()
      *
      * @test
@@ -87,6 +106,20 @@ class DrupalUserRegistryTest extends \Codeception\TestCase\Test
         $this->initialise();
         $expected = new DrupalTestUser("test.administrator", "test123!", "administrator");
         $this->assertTestUsersEqual($expected, $this->module->getUserByRole("administrator"));
+    }
+
+    /**
+     * Test getRoles()
+     *
+     * @test
+     * @group api
+     */
+    public function testGetRoles()
+    {
+        $this->initialise();
+        $expected = ["administrator", "editor", "moderator", "Authenticated"];
+        $this->assertEquals($expected, $this->module->getRoles());
+
     }
 
     /**
