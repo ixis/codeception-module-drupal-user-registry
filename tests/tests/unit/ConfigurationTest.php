@@ -40,7 +40,7 @@ class ConfigurationTest extends \Codeception\TestCase\Test
     {
         $this->tester->amGoingTo("get root user from loaded configuration");
         // @todo We are loading config from a suite with hard-coded name here. Sort this out.
-        $config = \Codeception\Configuration::suiteSettings("acceptance", \Codeception\Configuration::config());
+        $config = \Codeception\Configuration::suiteSettings("unit", \Codeception\Configuration::config());
 
         if (!isset($config["modules"]["config"]["DrupalUserRegistry"]["root"])) {
             \PHPUnit_Framework_Assert::fail("Root user configuration is not set.");

@@ -4,3 +4,13 @@
 class_name: UnitTester
 modules:
     enabled: [UnitHelper]
+    config:
+        DrupalUserRegistry:
+            roles: ['administrator', 'editor', 'moderator', 'Authenticated']
+            password: 'test123!'
+            create: true
+            delete: true
+            drush-alias: '@d7.local'
+            root:
+              username: root
+              password: root
