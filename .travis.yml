@@ -10,7 +10,6 @@ php:
 branches:
   only:
     - feature/add-tests
-    - feature/add-tests-move-up
 
 # Test preparation.
 before_script:
