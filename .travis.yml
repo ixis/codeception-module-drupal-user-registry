@@ -10,20 +10,14 @@ php:
 branches:
   only:
     - feature/add-tests
+    - feature/add-tests-move-up
 
 # Test preparation.
 before_script:
 
   # Update Composer, install dependencies and generate Codeception classes.
   - composer self-update
-  - cd tests && composer install
-  - vendor/bin/codecept build
-
-  # Ensure the test suite is using the module repository at the top level (instead of the Composer-installed version).
-  - rm -Rf vendor/pfaocle/codeception-module-drupal-user-registry
-  - ln -s ../../../../codeception-module-drupal-user-registry vendor/pfaocle/
-
-  # Rebuild *Tester classes, just in case anything has changed in the public methods Drupal User Registry provides.
+  - composer install
   - vendor/bin/codecept build
 
 # Run tests.
