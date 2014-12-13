@@ -34,7 +34,7 @@ $rootUser = $I->getRootUser();
 // store and retrieve a DrupalTestUser object representing the logged in user.
 // Note these methods don't actually log a user in or out - that currently
 // needs to be handled elsewhere.
-$I->setLoggedInUser($I->getUserByRole('administrator');
+$I->setLoggedInUser($I->getUserByRole('administrator'));
 $I->getLoggedInUser();
 $I->removeLoggedInUser();
 ```
