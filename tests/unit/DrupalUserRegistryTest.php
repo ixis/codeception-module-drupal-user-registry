@@ -50,4 +50,50 @@ class DrupalUserRegistryTest extends \Codeception\TestCase\Test
     {
         $this->assertInstanceOf('\Codeception\Module', $this->module);
     }
+
+    /**
+     * Test calling manageUsers() with an empty string as $op throws the expected exception.
+     *
+     * @test
+     */
+    public function testManageUsersThrowsExceptionForEmptyOp()
+    {
+        $refMethod = self::getNonPublicMethod("manageTestUsers");
+        $this->setExpectedException(
+            '\Codeception\Exception\Module',
+            "Invalid operation  when managing users."
+        );
+        $refMethod->invokeArgs($this->module, array(""));
+    }
+
+    /**
+     * Test calling manageUsers() with an invalid $op (i.e. not "create" or "delete") throws the expected exception.
+     *
+     * @test
+     */
+    public function testManageUsersThrowsExceptionForInvalidOp()
+    {
+        $refMethod = self::getNonPublicMethod("manageTestUsers");
+        $this->setExpectedException(
+            '\Codeception\Exception\Module',
+            "Invalid operation not-an-op when managing users."
+        );
+        $refMethod->invokeArgs($this->module, array("not-an-op"));
+    }
+
+    /**
+     * Get a protected/private method of a class via ReflectionClass.
+     *
+     * @param string $name
+     *   The name of the protected or private method.
+     *
+     * @return ReflectionMethod
+     */
+    protected static function getNonPublicMethod($name)
+    {
+        $class = new ReflectionClass('\Codeception\Module\DrupalUserRegistry');
+        $method = $class->getMethod($name);
+        $method->setAccessible(true);
+        return $method;
+    }
 }
