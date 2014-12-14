@@ -95,4 +95,30 @@ class DrushTestUserManagerTest extends \Codeception\TestCase\Test
         $this->assertEquals($expected->__toString(), $actual->__toString());
         $this->assertEquals($message, $actual->__toString());
     }
+
+    /**
+     * Test prepareDrushCommand()
+     *
+     * @test
+     */
+    public function testPrepareDrushCommand()
+    {
+        $testUserManager = new DrushTestUserManager(Fixtures::get("validModuleConfig"));
+        $refMethod = \Codeception\Module\UnitHelper::getNonPublicMethod(
+            '\Codeception\Module\Drupal\UserRegistry\DrushTestUserManager',
+            "prepareDrushCommand"
+        );
+        $this->assertEquals(
+            "drush -y '@d7.local' st",
+            $refMethod->invokeArgs($testUserManager, array("st")),
+            "Returned prepared command was not as expected."
+        );
+
+        // @todo prepareDrushCommand() should really throw an exception if $cmd is empty.
+        $this->assertEquals(
+            "drush -y '@d7.local' ",
+            $refMethod->invokeArgs($testUserManager, array("")),
+            "Returned prepared command was not as expected."
+        );
+    }
 }
