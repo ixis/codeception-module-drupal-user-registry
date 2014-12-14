@@ -70,14 +70,13 @@ class DrupalUserRegistry extends Module
 
     /**
      * @var DrupalTestUser[]
-     *   An array of People objects.
+     *   An array of configured test users.
      */
     protected $drupalTestUsers = [];
 
     /**
-     * A reference to the user who is currently logged in, if there is one.
-     *
      * @var DrupalTestUser
+     *   A reference to the user who is currently logged in, if there is one.
      */
     protected $loggedInUser;
 

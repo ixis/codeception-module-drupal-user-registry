@@ -10,12 +10,14 @@ _Drupal User Registry_ is a [Codeception module](http://codeception.com/addons) 
 It also allows the use of the following statements in tests:
 
 ```php
-// Returns a DrupalTestUser object representing the test user available for this role.
+// Returns a DrupalTestUser object representing the test user available for
+// this role.
 $user = $I->getUserByRole($roleName);
 
-// Returns a DrupalTestUser object representing the user, or false if no users were found. Note this will only
-// return a user defined and managed by this module, it will not return information about arbitrary accounts
-// on the site being tested.
+// Returns a DrupalTestUser object representing the user, or false if no users
+// were found. Note this will only return a user defined and managed by this
+// module, it will not return information about arbitrary accounts on the site
+// being tested.
 $user = $I->getUser($userName);
 
 // Returns an indexed array of configured roles, for example:
@@ -26,9 +28,20 @@ $user = $I->getUser($userName);
 //   );
 $roles = $I->getRoles();
 
-/// Returns a DrupalTestUser object representing the "root" user (account with uid 1), if credentials are configured:
+// Returns a DrupalTestUser object representing the "root" user (account with
+// uid 1), if credentials are configured:
 $rootUser = $I->getRootUser();
+
+// Also provided are a few utility methods that can be used in tests to
+// store and retrieve a DrupalTestUser object representing the logged in user.
+// Note these methods don't actually log a user in or out - that currently
+// needs to be handled elsewhere.
+$I->setLoggedInUser($I->getUserByRole('administrator'));
+$I->getLoggedInUser();
+$I->removeLoggedInUser();
 ```
+
+All methods available to the Actor object `$I` are defined in this module's [public API](https://github.com/pfaocle/codeception-module-drupal-user-registry/blob/master/API.md).
 
 The [DrupalTestUser](https://github.com/pfaocle/codeception-module-drupal-user-registry/blob/master/src/Drupal/UserRegistry/DrupalTestUser.php) class is a very minimal representation of a Drupal user account and can be used as part of a login procedure defined in, for example, a StepObject or PageObject.
 
