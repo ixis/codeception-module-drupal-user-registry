@@ -36,25 +36,21 @@ class DrupalUserRegistryTest extends \Codeception\TestCase\Test
      *
      * @test
      */
-    public function shouldBeInstantiatable()
+    public function instantiateClass()
     {
         $this->assertInstanceOf('\Codeception\Module\DrupalUserRegistry', $this->module);
     }
 
     /**
      * This class should extend \Codeception\Module
-     *
-     * @test
      */
-    public function shouldExtendCodeceptionModule()
+    public function testIfInstanceOfClassExtendsCodeceptionModule()
     {
         $this->assertInstanceOf('\Codeception\Module', $this->module);
     }
 
     /**
      * Test calling manageUsers() with an empty string as $op throws the expected exception.
-     *
-     * @test
      */
     public function testManageUsersThrowsExceptionForEmptyOp()
     {
@@ -71,8 +67,6 @@ class DrupalUserRegistryTest extends \Codeception\TestCase\Test
 
     /**
      * Test calling manageUsers() with an invalid $op (i.e. not "create" or "delete") throws the expected exception.
-     *
-     * @test
      */
     public function testManageUsersThrowsExceptionForInvalidOp()
     {

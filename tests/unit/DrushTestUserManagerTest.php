@@ -20,7 +20,7 @@ class DrushTestUserManagerTest extends \Codeception\TestCase\Test
      *
      * @test
      */
-    public function shouldBeInstantiatable()
+    public function instantiateClass()
     {
         $this->assertInstanceOf(
             '\Codeception\Module\Drupal\UserRegistry\DrushTestUserManager',
@@ -30,8 +30,6 @@ class DrushTestUserManagerTest extends \Codeception\TestCase\Test
 
     /**
      * An exception should be thrown when instantiating this class with an empty configuration.
-     *
-     * @test
      */
     public function testIfExceptionThrownWhenConfigurationIsEmpty()
     {
@@ -44,8 +42,6 @@ class DrushTestUserManagerTest extends \Codeception\TestCase\Test
 
     /**
      * A "almost valid" configuration object WITHOUT the drush-alias value set should throw an exception.
-     *
-     * @test
      */
     public function testIfExceptionThrownWhenConfigurationIsMissingDrushAlias()
     {
@@ -59,7 +55,6 @@ class DrushTestUserManagerTest extends \Codeception\TestCase\Test
     /**
      * Test message().
      *
-     * @test
      * @group protected
      */
     public function testMessage()
@@ -98,8 +93,6 @@ class DrushTestUserManagerTest extends \Codeception\TestCase\Test
 
     /**
      * Test prepareDrushCommand()
-     *
-     * @test
      */
     public function testPrepareDrushCommand()
     {

@@ -19,7 +19,7 @@ class DrupalTestUserTest extends \Codeception\TestCase\Test
      *
      * @test
      */
-    public function shouldBeInstantiatable()
+    public function instantiateClass()
     {
         $user = Fixtures::get("drupalTestUser");
         $this->assertInstanceOf(
@@ -30,8 +30,6 @@ class DrupalTestUserTest extends \Codeception\TestCase\Test
 
     /**
      * Test the class __toString() method.
-     *
-     * @test
      */
     public function testToString()
     {

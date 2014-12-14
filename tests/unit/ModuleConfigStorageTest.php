@@ -19,7 +19,7 @@ class ModuleConfigStorageTest extends \Codeception\TestCase\Test
      *
      * @test
      */
-    public function shouldBeInstantiatable()
+    public function instantiateClass()
     {
         $this->assertInstanceOf(
             '\Codeception\Module\Drupal\UserRegistry\Storage\ModuleConfigStorage',

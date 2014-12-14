@@ -33,7 +33,6 @@ class ConfigurationTest extends \Codeception\TestCase\Test
     /**
      * Test the root user is returned as configured.
      *
-     * @test
      * @group api
      * @group config
      */

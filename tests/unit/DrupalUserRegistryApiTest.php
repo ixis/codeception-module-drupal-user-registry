@@ -39,7 +39,6 @@ class DrupalUserRegistryApiTest extends \Codeception\TestCase\Test
     /**
      * Test getRootUser()
      *
-     * @test
      * @group api
      *
      * @throws \Codeception\Exception\Module
@@ -62,7 +61,6 @@ class DrupalUserRegistryApiTest extends \Codeception\TestCase\Test
     /**
      * Test the expected exceptions are thrown when the module is not configured enough to uset getRootUser()
      *
-     * @test
      * @group api
      */
     public function testGetRootUserThrowsExceptionWhenUsernameNotConfigured()
@@ -103,7 +101,6 @@ class DrupalUserRegistryApiTest extends \Codeception\TestCase\Test
     /**
      * Test getUser()
      *
-     * @test
      * @group api
      */
     public function testGetUser()
@@ -122,7 +119,6 @@ class DrupalUserRegistryApiTest extends \Codeception\TestCase\Test
     /**
      * Test getUserByRole()
      *
-     * @test
      * @group api
      */
     public function testGetUserByRole()
@@ -135,7 +131,6 @@ class DrupalUserRegistryApiTest extends \Codeception\TestCase\Test
     /**
      * Test getRoles()
      *
-     * @test
      * @group api
      */
     public function testGetRoles()
@@ -149,7 +144,6 @@ class DrupalUserRegistryApiTest extends \Codeception\TestCase\Test
     /**
      * Expect to see getLoggedInUser return null before a logged in user is set.
      *
-     * @test
      * @group api
      */
     public function testGetLoggedInUserIsNullBeforeAnyUserIsSet()
@@ -168,7 +162,6 @@ class DrupalUserRegistryApiTest extends \Codeception\TestCase\Test
      * Test that the result from getLoggedInUser() is what we expect after setting it with setLoggedInUser(), then
      * returns null after calling removeLoggedInUser()
      *
-     * @test
      * @group api
      */
     public function testSetGetRemoveLoggedInUserHelpers()
@@ -197,7 +190,6 @@ class DrupalUserRegistryApiTest extends \Codeception\TestCase\Test
      * verify this method works in isolation? This test at least verifies that removeLoggedInUser() doesn't actually
      * set the logged in user to anything other than null.
      *
-     * @test
      * @group api
      */
     public function testRemoveLoggedInUser()
