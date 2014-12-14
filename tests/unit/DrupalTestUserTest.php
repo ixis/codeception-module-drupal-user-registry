@@ -27,4 +27,16 @@ class DrupalTestUserTest extends \Codeception\TestCase\Test
             new DrupalTestUser($user->name, $user->pass)
         );
     }
+
+    /**
+     * Test the class __toString() method.
+     *
+     * @test
+     */
+    public function testToString()
+    {
+        $user = new DrupalTestUser("Test Username", "password");
+        $this->assertEquals("Test Username", $user->__toString());
+        $this->assertEquals("Test Username", $user . "");
+    }
 }
