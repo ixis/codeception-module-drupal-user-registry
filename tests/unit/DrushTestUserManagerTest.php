@@ -80,7 +80,10 @@ class DrushTestUserManagerTest extends \Codeception\TestCase\Test
     {
         // Set up.
         $output = new Codeception\Lib\Console\Output(array());
-        $refMethod = self::getProtectedMethod("message");
+        $refMethod = \Codeception\Module\UnitHelper::getNonPublicMethod(
+            '\Codeception\Module\Drupal\UserRegistry\DrushTestUserManager',
+            "message"
+        );
         $testUserManager = new DrushTestUserManager(Fixtures::get("validModuleConfig"));
 
         $expected = new Codeception\Lib\Console\Message($message, $output);
@@ -91,21 +94,5 @@ class DrushTestUserManagerTest extends \Codeception\TestCase\Test
         // instances.
         $this->assertEquals($expected->__toString(), $actual->__toString());
         $this->assertEquals($message, $actual->__toString());
-    }
-
-    /**
-     * Get a protected method of a class via ReflectionClass.
-     *
-     * @param string $name
-     *   The name of the protected method.
-     *
-     * @return ReflectionMethod
-     */
-    protected static function getProtectedMethod($name)
-    {
-        $class = new ReflectionClass('\Codeception\Module\Drupal\UserRegistry\DrushTestUserManager');
-        $method = $class->getMethod($name);
-        $method->setAccessible(true);
-        return $method;
     }
 }
