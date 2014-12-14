@@ -3,12 +3,14 @@
 namespace Codeception\Module;
 
 /**
- * Define custom actions: all public methods declared in helper class will be available in $I
+ * Define custom actions for unit tests.
+ *
+ * All non-static public methods declared in helper class will be available in $this->tester in Test files.
  */
 class UnitHelper extends \Codeception\Module
 {
     /**
-     * Get a protected/private method of a class via ReflectionClass.
+     * Get a protected or private method of a class via ReflectionClass.
      *
      * @param string $class
      *   The fully qualified name of the class.
