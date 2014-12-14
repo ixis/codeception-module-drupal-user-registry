@@ -172,6 +172,8 @@ class DrupalUserRegistry extends Module
 
     /**
      * Preparation done before a suite is run: create all test users set in storage, if configured to do so.
+     *
+     * @codeCoverageIgnore
      */
     public function _beforeSuite()
     {
@@ -180,6 +182,8 @@ class DrupalUserRegistry extends Module
 
     /**
      * Clean up performed after a suite is run: delete all test users set in storage, if configured to do so.
+     *
+     * @codeCoverageIgnore
      */
     public function _afterSuite()
     {
