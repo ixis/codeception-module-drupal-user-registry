@@ -77,6 +77,47 @@ class DrupalUserRegistryTest extends \Codeception\TestCase\Test
     }
 
     /**
+     * Test the expected exceptions are thrown when the module is not configured enough to uset getRootUser()
+     *
+     * @test
+     * @group api
+     */
+    public function testGetRootUserThrowsExceptionWhenUsernameNotConfigured()
+    {
+        $this->getRootUserMisconfigure(["username"]);
+        $this->getRootUserMisconfigure(["password"]);
+        $this->getRootUserMisconfigure(["username", "password"]);
+    }
+
+    /**
+     * Helper for testGetRootUserThrowsExceptionWhenUsernameNotConfigured()
+     *
+     * @param array $keysToUnset
+     *   List of keys to unset from $config["root"] array.
+     *
+     * @throws \Codeception\Exception\Module
+     */
+    protected function getRootUserMisconfigure($keysToUnset)
+    {
+        // Grab a valid module configuration but remove the root user's username.
+        $config = Fixtures::get("validModuleConfig");
+
+        foreach ($keysToUnset as $keyToUnset) {
+            unset($config["root"][$keyToUnset]);
+        }
+
+        $this->module = new \Codeception\Module\DrupalUserRegistry();
+        $this->module->_setConfig($config);
+        $this->module->_initialize();
+
+        $this->setExpectedException(
+            '\Codeception\Exception\Module',
+            "Credentials for the root user (username, password) are not configured."
+        );
+        $this->module->getRootUser();
+    }
+
+    /**
      * Test getUser()
      *
      * @test
