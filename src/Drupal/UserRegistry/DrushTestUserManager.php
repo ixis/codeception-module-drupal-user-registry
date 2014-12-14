@@ -150,29 +150,18 @@ class DrushTestUserManager implements TestUserManagerInterface
     }
 
     /**
-     * Run a drush command.
+     * Run a Drush command.
      *
-     * @param $cmd
-     *   The drush command, without executable and alias.
-     *   e.g. "pml"
-     *   The arguments should be escaped.
+     * @param string $cmd
+     *   The Drush command, without executable and alias, e.g. "pml". The arguments should be escaped.
      *
      * @return array
-     *   Array of lines output from the drush command.
+     *   Array of lines output from the Drush command.
      */
     protected function runDrush($cmd)
     {
-        $baseCmd = sprintf(
-            "drush -y %s",
-            escapeshellarg($this->alias)
-        );
-
-        $cmd = "$baseCmd $cmd";
-
-        Debug::debug($cmd);
-
         $cmdOutput = array();
-        exec($cmd, $cmdOutput);
+        exec($this->prepareDrushCommand($cmd), $cmdOutput);
 
         return array_filter(
             $cmdOutput,
@@ -180,6 +169,23 @@ class DrushTestUserManager implements TestUserManagerInterface
                 return strpos($line, "Warning: Permanently added") !== 0;
             }
         );
+    }
+
+    /**
+     * Prepare a full Drush command, to include executable and alias.
+     *
+     * @param string $cmd
+     *   The Drush command, without executable and alias, e.g. "pml". The arguments should be escaped.
+     *
+     * @return string
+     *   The prepared Drush command to run, complete with executable and alias.
+     */
+    protected function prepareDrushCommand($cmd)
+    {
+        $baseCmd = sprintf("drush -y %s", escapeshellarg($this->alias));
+        $cmd = "$baseCmd $cmd";
+        Debug::debug($cmd);
+        return $cmd;
     }
 
     /**
