@@ -2,10 +2,10 @@
 <phpdoc>
     <title>Drupal User Registry Codeception module</title>
     <parser>
-        <target>docs</target>
+        <target>docs/phpdoc</target>
     </parser>
     <transformer>
-        <target>docs</target>
+        <target>docs/phpdoc</target>
     </transformer>
     <transformations>
         <template name="clean"/>
