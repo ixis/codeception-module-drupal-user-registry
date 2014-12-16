@@ -72,11 +72,7 @@ class RoboFile extends \Robo\Tasks
      */
     public function docsPhpdoc()
     {
-        $this->taskExec(sprintf(
-            "phpdoc run -d %s -t %s",
-            self::SRC_DIR,
-            self::DOCS_DIR . DIRECTORY_SEPARATOR . self::PHPDOC_DOCS_SUBDIR
-        ))->run();
+        $this->taskExec("phpdoc run")->run();
     }
 
     /**

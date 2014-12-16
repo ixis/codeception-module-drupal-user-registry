@@ -11,3 +11,6 @@ tests/_output/*
 
 ; Ignore generated documentation (for now).
 docs
+
+; phpDocumentor local configuration.
+phpdoc.xml
