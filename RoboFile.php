@@ -44,8 +44,7 @@ class RoboFile extends \Robo\Tasks
      */
     public function docsGenerate()
     {
-        $this->taskExec(sprintf("phpdoc run -d %s -t %s", self::SRC_DIR, self::DOCS_DIR))
-            ->run();
+        $this->taskExec("phpdoc run")->run();
     }
 
     /**
