@@ -35,13 +35,22 @@ class CreateDeleteUsersCest
     }
 
     /**
-     * Always clean up the test users, regardless of configuration, in preparation for subsequent tests.
+     * Clean up the test users (regardless of current module configuration) in preparation for subsequent tests.
+     *
+     * Note this method of cleaning up the test users will only be used when Db cleanup is set to false.
      *
      * @param FunctionalTester $I
      *   The Actor or StepObject being used to test.
      */
     public function _after(FunctionalTester $I)
     {
+        // Only need to use the module to clean up if we're not doing it with Db module.
+        $config = Codeception\Configuration::config();
+        if (isset($config["modules"]["config"]["Db"]["cleanup"])
+            && $config["modules"]["config"]["Db"]["cleanup"] == true) {
+            return;
+        }
+
         $config = $this->moduleConfig;
         $config["delete"] = true;
         $this->module->_reconfigure($config);
