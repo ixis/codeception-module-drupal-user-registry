@@ -110,6 +110,34 @@ class CreateDeleteUsersCest
     }
 
     /**
+     * Test users are created with the correct roles.
+     *
+     * @param FunctionalTester $I
+     *   The Actor or StepObject being used to test.
+     */
+    public function testCreatedUsersHaveCorrectRoles(FunctionalTester $I)
+    {
+        $this->module->_beforeSuite();
+
+        // Grab a map of role name => test user $uid from the database. This assumes the current 1-1 relationship
+        // between roles and test users.
+        $users = array();
+        foreach ($this->moduleConfig["roles"] as $role) {
+            if ($role != "Authenticated") {
+                $uid = $I->grabFromDatabase("users", "uid", array("name" => $this->getTestUsername($role)));
+                $users[$role] = $uid;
+            }
+        }
+
+        foreach ($this->moduleConfig["roles"] as $role) {
+            if ($role != "Authenticated") {
+                $rid = $I->grabFromDatabase("role", "rid", array("name" => $role));
+                $I->seeInDatabase("users_roles", array("uid" => $users[$role], "rid" => $rid));
+            }
+        }
+    }
+
+    /**
      * Helper to translate role names to test usernames.
      *
      * @todo This code is copied from ModuleConfigStorage::load(), where it's a bit buried. Needs refactoring.
