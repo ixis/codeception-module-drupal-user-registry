@@ -15,7 +15,9 @@ coverage:
 modules:
     config:
         Db:
-            dsn: ''
-            user: ''
+            dsn: 'mysql:host=localhost;dbname=d7'
+            user: 'root'
             password: ''
-            dump: tests/_data/dump.sql
+            dump: tests/_data/d7_minimal.sql
+            populate: false
+            cleanup: false

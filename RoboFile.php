@@ -98,16 +98,17 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * Run (functional) tests.
+     * Run all tests locally.
      */
     public function testsRun()
     {
         // Still have to build the *Tester classes if we've just checked out.
         $this->testsBuild();
 
-        foreach (["unit"] as $suite) {
+        foreach (["unit", "functional"] as $suite) {
             $this->taskCodecept(self::CODECEPTION_PATH)
                 ->option("config", "codeception.yml")
+                ->option("env", "local")
                 ->suite($suite)
                 ->run();
         }
