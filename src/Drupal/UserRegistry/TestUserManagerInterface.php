@@ -1,6 +1,7 @@
 <?php
 
 namespace Codeception\Module\Drupal\UserRegistry;
+
 use Codeception\Module\Drupal\UserRegistry\Storage\StorageInterface;
 
 /**
