@@ -46,7 +46,7 @@ The [DrupalTestUser](https://github.com/pfaocle/codeception-module-drupal-user-r
 This module currently uses Drush and Drush aliases to create, delete and add roles to user accounts. Note that the `--delete-content` option is used when deleting users, so any content created by that user account will also be removed.
 
 
-## Install with Composer
+## Installation
 
 This module is available on [Packagist](https://packagist.org/packages/pfaocle/codeception-module-drupal-user-registry) and can be installed with Composer:
 
@@ -129,6 +129,17 @@ The module provides more verbose output when used with Codeception's `--debug` o
     ...
 
 
+## Contribute
+
+- Issue Tracker: github.com/pfaocle/codeception-module-drupal-user-registry/issues
+- Source Code: github.com/pfaocle/codeception-module-drupal-user-registry
+
+
 ## Acknowledgements
 
-Props to [Andy Rigby](https://github.com/ixisandyr) for the storage code and inspiration.
+Thanks to [Andy Rigby](https://github.com/ixisandyr) for the storage code and inspiration.
+
+
+## License
+
+The project is licensed under The MIT License (MIT).
