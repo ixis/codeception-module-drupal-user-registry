@@ -3,8 +3,10 @@
 namespace Codeception\Module\Drupal\UserRegistry;
 
 use Codeception\Exception\Configuration as ConfigurationException;
+use Codeception\Exception\Module as ModuleException;
 use Codeception\Lib\Console\Message;
 use Codeception\Lib\Console\Output;
+use Codeception\Module\DrupalUserRegistry;
 use Codeception\Util\Debug;
 
 /**
@@ -46,18 +48,19 @@ class DrushTestUserManager implements TestUserManagerInterface
     {
         Debug::debug("Trying to create test user '{$user->name}' on '{$this->alias}'.");
 
-        $cmdOutput = $this->runDrush("user-information " . escapeshellarg($user->name));
-
-        if (count($cmdOutput) == 1
-            && strpos(current($cmdOutput), "Could not find a uid for the search term '{$user->name}'!") !== false) {
-
+        if ($this->userExists($user->name)) {
+            $this->message(
+                "User '{$user->name}' already exists on {$this->alias}, skipping.",
+                new Output(array())
+            )->writeln();
+        } else {
             // Create the user.
-            $this->message("Creating test user '{$user->name}' on '{$this->alias}'.", new Output(array()))->writeln();
+            $this->message("Creating test user '{$user->name}' on {$this->alias}.", new Output(array()))->writeln();
             $this->runDrush(
                 sprintf(
                     "user-create %s --mail=%s --password=%s",
                     escapeshellarg($user->name),
-                    escapeshellarg("{$user->name}@example.com"),
+                    escapeshellarg($user->name . "@" . DrupalUserRegistry::DRUPAL_USER_EMAIL_DOMAIN),
                     escapeshellarg($user->pass)
                 )
             );
@@ -72,8 +75,6 @@ class DrushTestUserManager implements TestUserManagerInterface
                     )
                 );
             }
-        } else {
-            Debug::debug("User {$user->name} already exists, skipping.");
         }
     }
 
@@ -118,29 +119,49 @@ class DrushTestUserManager implements TestUserManagerInterface
     }
 
     /**
-     * Run a drush command.
+     * Determine if a user with a given username exists.
      *
-     * @param $cmd
-     *   The drush command, without executable and alias.
-     *   e.g. "pml"
-     *   The arguments should be escaped.
+     * {@inheritdoc}
+     *
+     * @throws ModuleException
+     */
+    public function userExists($username)
+    {
+        $jsonOutput = $this->runDrush("user-information " . escapeshellarg($username) . " --format=json");
+
+        if (!is_array($jsonOutput)) {
+            throw new ModuleException(__CLASS__, "Response from Drush was not an array as expected.");
+        }
+
+        $jsonResult = array_pop($jsonOutput);
+        $jsonUser = json_decode($jsonResult, true);
+
+        if (!is_null($jsonUser)) {
+            $jsonUser = array_pop($jsonUser);
+            if (isset($jsonUser["name"]) && $jsonUser["name"] == $username) {
+                // This test user already exists.
+                return true;
+            } else {
+                throw new ModuleException(__CLASS__, "Drush returned a user but the username did not match.");
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Run a Drush command.
+     *
+     * @param string $cmd
+     *   The Drush command, without executable and alias, e.g. "pml". The arguments should be escaped.
      *
      * @return array
-     *   Array of lines output from the drush command.
+     *   Array of lines output from the Drush command.
      */
     protected function runDrush($cmd)
     {
-        $baseCmd = sprintf(
-            "drush -y %s",
-            escapeshellarg($this->alias)
-        );
-
-        $cmd = "$baseCmd $cmd";
-
-        Debug::debug($cmd);
-
         $cmdOutput = array();
-        exec($cmd, $cmdOutput);
+        exec($this->prepareDrushCommand($cmd), $cmdOutput);
 
         return array_filter(
             $cmdOutput,
@@ -148,6 +169,23 @@ class DrushTestUserManager implements TestUserManagerInterface
                 return strpos($line, "Warning: Permanently added") !== 0;
             }
         );
+    }
+
+    /**
+     * Prepare a full Drush command, to include executable and alias.
+     *
+     * @param string $cmd
+     *   The Drush command, without executable and alias, e.g. "pml". The arguments should be escaped.
+     *
+     * @return string
+     *   The prepared Drush command to run, complete with executable and alias.
+     */
+    protected function prepareDrushCommand($cmd)
+    {
+        $baseCmd = sprintf("drush -y %s", escapeshellarg($this->alias));
+        $cmd = "$baseCmd $cmd";
+        Debug::debug($cmd);
+        return $cmd;
     }
 
     /**
