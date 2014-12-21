@@ -9,7 +9,7 @@ php:
 # Whitelist branches to build.
 branches:
   only:
-    - feature/add-tests
+    - master
 
 # Test preparation.
 before_script:
