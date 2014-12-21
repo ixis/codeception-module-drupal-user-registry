@@ -1,0 +1,24 @@
+#
+# Travis CI configuration for testing codeception-module-drupal-user-registry
+#
+
+language: php
+php:
+  - 5.4
+
+# Whitelist branches to build.
+branches:
+  only:
+    - feature/add-tests
+
+# Test preparation.
+before_script:
+
+  # Update Composer, install dependencies and generate Codeception classes.
+  - composer self-update
+  - composer install
+  - vendor/bin/codecept build
+
+# Run tests.
+script:
+  - vendor/bin/codecept run unit --debug --coverage

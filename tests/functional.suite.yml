@@ -1,0 +1,14 @@
+#
+# Configuration for Drupal User Registry functional (database) tests.
+#
+class_name: FunctionalTester
+modules:
+    enabled: [Db, FunctionalHelper]
+env:
+    # Override Db module configuration to run on local.
+    local:
+        modules:
+            config:
+                Db:
+                    dsn: 'mysql:host=33.33.33.10;dbname=d7'
+                    password: 'root'
