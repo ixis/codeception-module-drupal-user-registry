@@ -3,3 +3,14 @@
 ; Composer
 vendor
 composer.lock
+
+; Test suite
+tests/*/*Tester.php
+tests/_output/*
+!tests/_output/README.md
+
+; Ignore generated documentation (for now).
+docs
+
+; phpDocumentor local configuration.
+phpdoc.xml

@@ -2,6 +2,7 @@
 
 namespace Codeception\Module;
 
+use Codeception\Exception\Module as ModuleException;
 use Codeception\Module;
 use Codeception\Module\Drupal\UserRegistry\DrupalTestUser;
 use Codeception\Module\Drupal\UserRegistry\DrushTestUserManager;
@@ -69,9 +70,15 @@ class DrupalUserRegistry extends Module
 
     /**
      * @var DrupalTestUser[]
-     *   An array of People objects.
+     *   An array of configured test users.
      */
     protected $drupalTestUsers = [];
+
+    /**
+     * @var DrupalTestUser
+     *   A reference to the user who is currently logged in, if there is one.
+     */
+    protected $loggedInUser;
 
     /**
      * Initialize the module. Check for required configuration then load users.
@@ -144,7 +151,28 @@ class DrupalUserRegistry extends Module
     }
 
     /**
+     * Get the "root" user with  uid 1, if configured.
+     *
+     * @return DrupalTestUser
+     *   The configured "root" user.
+     *
+     * @throws ModuleException
+     */
+    public function getRootUser()
+    {
+        if (!isset($this->config['root']['username']) || !isset($this->config['root']['password'])) {
+            throw new ModuleException(
+                __CLASS__,
+                "Credentials for the root user (username, password) are not configured."
+            );
+        }
+        return new DrupalTestUser($this->config['root']['username'], $this->config['root']['password']);
+    }
+
+    /**
      * Preparation done before a suite is run: create all test users set in storage, if configured to do so.
+     *
+     * @codeCoverageIgnore
      */
     public function _beforeSuite()
     {
@@ -153,6 +181,8 @@ class DrupalUserRegistry extends Module
 
     /**
      * Clean up performed after a suite is run: delete all test users set in storage, if configured to do so.
+     *
+     * @codeCoverageIgnore
      */
     public function _afterSuite()
     {
@@ -187,5 +217,33 @@ class DrupalUserRegistry extends Module
             $fn = "{$op}Users";
             $this->testUserManager->$fn($this->drupalTestUsers);
         }
+    }
+
+    /**
+     * Gets the user who is currently logged in, or null if there isn't one.
+     *
+     * @return DrupalTestUser|null
+     */
+    public function getLoggedInUser()
+    {
+        return $this->loggedInUser;
+    }
+
+    /**
+     * Sets the user who is currently logged in.
+     *
+     * @param DrupalTestUser $person
+     */
+    public function setLoggedInUser($person)
+    {
+        $this->loggedInUser = $person;
+    }
+
+    /**
+     * Removes the currently logged in user, if there is one, and sets it back to null.
+     */
+    public function removeLoggedInUser()
+    {
+        $this->loggedInUser = null;
     }
 }

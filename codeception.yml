@@ -1,0 +1,23 @@
+actor: Tester
+paths:
+    tests: tests
+    log: tests/_output
+    data: tests/_data
+    helpers: tests/_support
+settings:
+    bootstrap: _bootstrap.php
+    colors: true
+    memory_limit: 1024M
+coverage:
+    enabled: true
+    include:
+        - src/*
+modules:
+    config:
+        Db:
+            dsn: 'mysql:host=localhost;dbname=d7'
+            user: 'root'
+            password: ''
+            dump: tests/_data/d7_minimal.sql
+            populate: true
+            cleanup: true

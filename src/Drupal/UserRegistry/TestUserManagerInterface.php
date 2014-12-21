@@ -57,4 +57,15 @@ interface TestUserManagerInterface
      *   An array of DrupalTestUser objects to delete.
      */
     public function deleteUsers($users);
+
+    /**
+     * Determine if a user with a given username exists.
+     *
+     * @param string $username
+     *   The username to check.
+     *
+     * @return bool
+     *   True if the user exists, false otherwise.
+     */
+    public function userExists($username);
 }
