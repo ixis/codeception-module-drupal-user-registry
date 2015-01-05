@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-require_once dirname(__FILE__) . '/../../../autoload.php';
+require_once dirname(__FILE__) . '/../vendor/autoload.php';
 
 use Codeception\Module\Drupal\UserRegistry\Command\CreateTestUsersCommand;
 use Codeception\Module\Drupal\UserRegistry\Command\DeleteTestUsersCommand;
