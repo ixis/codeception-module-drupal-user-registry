@@ -27,14 +27,18 @@ trait TestUsersCommandTrait
     protected $testUserManager;
 
     /**
-     * @param $suiteName
+     * @param string $suiteName
+     * @param array $suiteSettings
+     *
      * @throws ModuleException
      * @throws \Codeception\Exception\Configuration
      * @throws \Exception
      */
-    protected function getTestUsers($suiteName)
+    protected function getTestUsers($suiteName, $suiteSettings = null)
     {
-        $suiteSettings = Configuration::suiteSettings($suiteName, Configuration::config());
+        if (!$suiteSettings) {
+            $suiteSettings = Configuration::suiteSettings($suiteName, Configuration::config());
+        }
 
         if (!isset($suiteSettings['modules']['config']['DrupalUserRegistry'])) {
             throw new ModuleException(

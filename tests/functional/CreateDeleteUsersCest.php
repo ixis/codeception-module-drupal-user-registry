@@ -2,7 +2,6 @@
 
 use \FunctionalTester;
 
-use Codeception\Module\Drupal\UserRegistry\Storage\ModuleConfigStorage;
 use Codeception\Util\Fixtures;
 
 /**
@@ -135,23 +134,5 @@ class CreateDeleteUsersCest
                 $I->seeInDatabase("users_roles", array("uid" => $users[$role], "rid" => $rid));
             }
         }
-    }
-
-    /**
-     * Helper to translate role names to test usernames.
-     *
-     * @todo This code is copied from ModuleConfigStorage::load(), where it's a bit buried. Needs refactoring.
-     *
-     * @see ModuleConfigStorage::load()
-     *
-     * @param string $role
-     *   The name of the role to translate into a test username.
-     *
-     * @return string
-     */
-    protected function getTestUsername($role)
-    {
-        $roleNameSuffix = preg_replace(ModuleConfigStorage::DRUPAL_ROLE_TO_USERNAME_PATTERN, ".", $role);
-        return ModuleConfigStorage::DRUPAL_USERNAME_PREFIX . "." . $roleNameSuffix;
     }
 }

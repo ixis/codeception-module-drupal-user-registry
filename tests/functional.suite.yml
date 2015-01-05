@@ -3,7 +3,7 @@
 #
 class_name: FunctionalTester
 modules:
-    enabled: [Db, FunctionalHelper]
+    enabled: [Asserts, Db, FunctionalHelper]
 env:
     # Override Db module configuration to run on local.
     local:
