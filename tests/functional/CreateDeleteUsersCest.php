@@ -31,7 +31,6 @@ class CreateDeleteUsersCest
         $this->module = new \Codeception\Module\DrupalUserRegistry();
         $this->moduleConfig = Fixtures::get("validModuleConfig");
         $this->module->_setConfig($this->moduleConfig);
-        $this->module->_initialize();
     }
 
     /**
@@ -65,6 +64,7 @@ class CreateDeleteUsersCest
      */
     public function testUsersAreCreated(FunctionalTester $I)
     {
+        $this->module->_initialize();
         $this->module->_beforeSuite();
         foreach ($this->moduleConfig["roles"] as $role) {
             $I->seeInDatabase("users", array("name" => $this->getTestUsername($role)));
@@ -79,6 +79,7 @@ class CreateDeleteUsersCest
      */
     public function testUsersAreDeleted(FunctionalTester $I)
     {
+        $this->module->_initialize();
         $this->module->_beforeSuite();
         $this->module->_afterSuite();
         foreach ($this->moduleConfig["roles"] as $role) {
@@ -98,6 +99,7 @@ class CreateDeleteUsersCest
         $config["delete"] = false;
         $this->module->_reconfigure($config);
 
+        $this->module->_initialize();
         $this->module->_beforeSuite();
         foreach ($this->moduleConfig["roles"] as $role) {
             $I->seeInDatabase("users", array("name" => $this->getTestUsername($role)));
@@ -117,6 +119,7 @@ class CreateDeleteUsersCest
      */
     public function testCreatedUsersHaveCorrectRoles(FunctionalTester $I)
     {
+        $this->module->_initialize();
         $this->module->_beforeSuite();
 
         // Grab a map of role name => test user $uid from the database. This assumes the current 1-1 relationship
