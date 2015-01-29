@@ -23,7 +23,7 @@ class ModuleConfigStorage implements StorageInterface
      * This string will be used as a prefix for a test user name in conjunction with the replacement pattern above. The
      * examples above will have usernames 'test.forum.moderator' and 'test.high.level.administrator' respectively.
      */
-    protected $drupal_username_prefix = 'test';
+    protected $drupalUsernamePrefix = 'test';
 
     /**
      * @var array
@@ -42,20 +42,25 @@ class ModuleConfigStorage implements StorageInterface
      *
      * @param array $config
      *   Array containing the DrupalUserRegistry module configuration.
+     *
+     * @throws \Codeception\Exception\Module
      */
     public function __construct($config)
     {
         $this->roles = $config['roles'];
         $this->password = $config['password'];
+
         if (isset($config['drupal_username_prefix'])) {
             if (strlen($config['drupal_username_prefix']) < 4) {
                 throw new ModuleException(
                     __CLASS__,
-                    "Drupal username prefix should contain at least 4 characters. (" . $config['drupal_username_prefix'] . ")"
+                    sprintf(
+                        "Drupal username prefix should contain at least 4 characters (%s).",
+                        $config['drupal_username_prefix']
+                    )
                 );
-            } else
-            {
-              $this->drupal_username_prefix = (string)$config['drupal_username_prefix'];
+            } else {
+                $this->drupalUsernamePrefix = (string)$config['drupal_username_prefix'];
             }
         }
     }
@@ -70,7 +75,7 @@ class ModuleConfigStorage implements StorageInterface
         return array_map(
             function ($roleName) {
                 $roleNameSuffix = preg_replace(self::DRUPAL_ROLE_TO_USERNAME_PATTERN, ".", $roleName);
-                $userName = $this->drupal_username_prefix . "." . $roleNameSuffix;
+                $userName = $this->drupalUsernamePrefix . "." . $roleNameSuffix;
                 return new DrupalTestUser($userName, $this->password, $roleName);
             },
             array_combine($this->roles, $this->roles)
