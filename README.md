@@ -85,6 +85,7 @@ modules:
             root:
                 username: root           # Username for user with uid 1.
                 password: root           # Password for user with uid 1.
+            username-prefix: robot       # Use this string instead of the default 'test' for prefixing test usernames.
 ```
 
 ### Required configuration
@@ -93,6 +94,7 @@ modules:
 * `create` and `delete` are optional and are assumed to be `false` if not set.
 * `drush-alias` is only currently required as [DrushTestUserManager](https://github.com/pfaocle/codeception-module-drupal-user-registry/blob/master/src/Drupal/UserRegistry/DrushTestUserManager.php) is the only class available for managing (creating/deleting) users.
 * The `root` key and its `username` and `password` are only required if `$I->getRootUser()` is used.
+* `username-prefix` can be used to set the prefix used for test users' usernames, instead of the default 'test'.
 
 ### Derivate usernames
 

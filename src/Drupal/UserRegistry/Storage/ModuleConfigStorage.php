@@ -20,8 +20,10 @@ class ModuleConfigStorage implements StorageInterface
     const DRUPAL_ROLE_TO_USERNAME_PATTERN = '/(\s|-)/';
 
     /**
-     * This string will be used as a prefix for a test user name in conjunction with the replacement pattern above. The
-     * examples above will have usernames 'test.forum.moderator' and 'test.high.level.administrator' respectively.
+     * This string will be used as a prefix for a test user name in conjunction with the replacement pattern above.
+     *
+     * Using the default value, the examples above will have usernames 'test.forum.moderator' and
+     * 'test.high.level.administrator' respectively. This prefix can be overridden in the module's configuration.
      */
     protected $drupalUsernamePrefix = 'test';
 
@@ -50,17 +52,17 @@ class ModuleConfigStorage implements StorageInterface
         $this->roles = $config['roles'];
         $this->password = $config['password'];
 
-        if (isset($config['drupal_username_prefix'])) {
-            if (strlen($config['drupal_username_prefix']) < 4) {
+        if (isset($config['username-prefix'])) {
+            if (strlen($config['username-prefix']) < 4) {
                 throw new ModuleException(
                     __CLASS__,
                     sprintf(
                         "Drupal username prefix should contain at least 4 characters (%s).",
-                        $config['drupal_username_prefix']
+                        $config['username-prefix']
                     )
                 );
             } else {
-                $this->drupalUsernamePrefix = (string)$config['drupal_username_prefix'];
+                $this->drupalUsernamePrefix = (string)$config['username-prefix'];
             }
         }
     }
