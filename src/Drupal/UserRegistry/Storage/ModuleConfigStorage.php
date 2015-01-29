@@ -74,13 +74,21 @@ class ModuleConfigStorage implements StorageInterface
      */
     public function load()
     {
-        return array_map(
-            function ($roleName) {
-                $roleNameSuffix = preg_replace(self::DRUPAL_ROLE_TO_USERNAME_PATTERN, ".", $roleName);
-                $userName = $this->drupalUsernamePrefix . "." . $roleNameSuffix;
-                return new DrupalTestUser($userName, $this->password, $roleName);
-            },
-            array_combine($this->roles, $this->roles)
-        );
+        return array_map([$this, "mapRoleToTestUser"], array_combine($this->roles, $this->roles));
+    }
+
+    /**
+     * Generate a test user name from a role name and return the corresponding DrupalTestUser object.
+     *
+     * @param string $roleName
+     *   The role for which to generate a test user.
+     *
+     * @return \Codeception\Module\Drupal\UserRegistry\DrupalTestUser
+     */
+    public function mapRoleToTestUser($roleName)
+    {
+        $roleNameSuffix = preg_replace(self::DRUPAL_ROLE_TO_USERNAME_PATTERN, ".", $roleName);
+        $userName = $this->drupalUsernamePrefix . "." . $roleNameSuffix;
+        return new DrupalTestUser($userName, $this->password, $roleName);
     }
 }

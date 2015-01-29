@@ -140,9 +140,9 @@ class CreateDeleteUsersCest
     /**
      * Helper to translate role names to test usernames.
      *
-     * @todo This code is copied from ModuleConfigStorage::load(), where it's a bit buried. Needs refactoring.
+     * @todo This code relies on using ModuleConfigStorage::mapRoleToTestUser()
      *
-     * @see ModuleConfigStorage::load()
+     * @see ModuleConfigStorage::mapRoleToTestUser()
      *
      * @param string $role
      *   The name of the role to translate into a test username.
@@ -151,7 +151,8 @@ class CreateDeleteUsersCest
      */
     protected function getTestUsername($role)
     {
-        $roleNameSuffix = preg_replace(ModuleConfigStorage::DRUPAL_ROLE_TO_USERNAME_PATTERN, ".", $role);
-        return ModuleConfigStorage::DRUPAL_USERNAME_PREFIX . "." . $roleNameSuffix;
+        $dummyStorage = new ModuleConfigStorage($this->moduleConfig);
+        $testUser = $dummyStorage->mapRoleToTestUser($role);
+        return $testUser->name;
     }
 }
