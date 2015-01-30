@@ -3,6 +3,7 @@
 namespace Codeception\Module\Drupal\UserRegistry\Storage;
 
 use Codeception\Module\Drupal\UserRegistry\DrupalTestUser;
+use Codeception\Exception\Configuration as ConfigException;
 use Codeception\Exception\Module as ModuleException;
 
 /**
@@ -45,7 +46,7 @@ class ModuleConfigStorage implements StorageInterface
      * @param array $config
      *   Array containing the DrupalUserRegistry module configuration.
      *
-     * @throws \Codeception\Exception\Module
+     * @throws \Codeception\Exception\Configuration
      */
     public function __construct($config)
     {
@@ -54,13 +55,10 @@ class ModuleConfigStorage implements StorageInterface
 
         if (isset($config['username-prefix'])) {
             if (strlen($config['username-prefix']) < 4) {
-                throw new ModuleException(
-                    __CLASS__,
-                    sprintf(
-                        "Drupal username prefix should contain at least 4 characters (%s).",
-                        $config['username-prefix']
-                    )
-                );
+                throw new ConfigException(sprintf(
+                    "Drupal username prefix should contain at least 4 characters (%s).",
+                    $config['username-prefix']
+                ));
             } else {
                 $this->drupalUsernamePrefix = (string)$config['username-prefix'];
             }
