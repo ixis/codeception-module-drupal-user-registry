@@ -1,5 +1,9 @@
+#
+# pre-commit configuration for Codeception Drupal User Registry module.
+#
+
 -   repo: git://github.com/pre-commit/pre-commit-hooks
-    sha: 'v0.3.0'
+    sha: 'v0.4.1'
     hooks:
     -   id: check-json
     -   id: check-yaml
