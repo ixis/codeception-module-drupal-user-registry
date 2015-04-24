@@ -9,3 +9,16 @@
     -   id: check-yaml
     -   id: end-of-file-fixer
     -   id: trailing-whitespace
+
+# Currently using a fork of https://github.com/hootsuite/pre-commit-php.
+# Fixes colors and bash syntax error on OS X.
+# Refs: https://github.com/hootsuite/pre-commit-php/issues/2
+-   repo: git@github.com:ixisandyr/pre-commit-php.git
+    sha: master
+    hooks:
+    -   id: php-lint-all
+        files: ^(src|tests)/.+\.(php)$
+        # Run php code sniffer with PSR2 standard, tweaked for Codeception.
+    -   id: php-cs
+        files: ^(src|tests)/.+\.(php)$
+        args: ["--standard=ruleset.xml", "-p", "--colors"]
