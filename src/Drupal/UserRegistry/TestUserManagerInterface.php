@@ -14,6 +14,8 @@ interface TestUserManagerInterface
      *
      * @param DrupalTestUser $user
      *   The user to create.
+     *
+     * @return void
      */
     public function createUser($user);
 
@@ -22,6 +24,8 @@ interface TestUserManagerInterface
      *
      * @param array $users
      *   An array of DrupalTestUser objects to create.
+     *
+     * @return void
      */
     public function createUsers($users);
 
@@ -30,6 +34,8 @@ interface TestUserManagerInterface
      *
      * @param DrupalTestUser $user
      *   The user to delete.
+     *
+     * @return void
      */
     public function deleteUser($user);
 
@@ -38,6 +44,8 @@ interface TestUserManagerInterface
      *
      * @param array $users
      *   An array of DrupalTestUser objects to delete.
+     *
+     * @return void
      */
     public function deleteUsers($users);
 
