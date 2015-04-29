@@ -23,6 +23,12 @@ class DrushTestUserManager implements TestUserManagerInterface
     protected $alias;
 
     /**
+     * @var Output
+     *   Used to print messages via Codeception's console.
+     */
+    protected $output;
+
+    /**
      * Constructor: ensure we have all the configuration values we need and store them.
      *
      * @param array $config
