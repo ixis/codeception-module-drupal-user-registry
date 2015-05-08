@@ -69,6 +69,12 @@ class DrupalUserRegistry extends Module
     protected $testUserManager;
 
     /**
+     * @var StorageInterface
+     *   User storage.
+     */
+    protected $userStorage;
+
+    /**
      * @var DrupalTestUser[]
      *   An array of configured test users.
      */
@@ -99,7 +105,7 @@ class DrupalUserRegistry extends Module
      */
     protected function loadUsers(StorageInterface $storage)
     {
-        $this->storage = $storage;
+        $this->userStorage = $storage;
         $this->drupalTestUsers = $storage->load();
     }
 
