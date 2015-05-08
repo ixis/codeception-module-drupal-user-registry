@@ -64,7 +64,7 @@ class DrupalUserRegistry extends Module
 
     /**
      * @var TestUserManagerInterface
-     *   Stories the manager used to create/delete users.
+     *   Stores the manager used to create/delete users.
      */
     protected $testUserManager;
 
