@@ -16,7 +16,7 @@
 
     "require-dev": {
         "codeception/codeception": "~2.0.8",
-        "codegyre/robo": "~0.4.6"
+        "codegyre/robo": "~0.5.2"
     },
 
     "autoload": {
