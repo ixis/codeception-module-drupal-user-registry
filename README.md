@@ -90,11 +90,14 @@ modules:
                 password: root           # Password for user with uid 1.
 ```
 
-### Required configuration
+### Required and optional configuration
 
-* Configuration values for `roles` and `password` are required.
-* `create` and `delete` are optional and are assumed to be `false` if not set.
-* `drush-alias` is only currently required as [DrushTestUserManager](https://github.com/pfaocle/codeception-module-drupal-user-registry/blob/master/src/Drupal/UserRegistry/DrushTestUserManager.php) is the only class available for managing (creating/deleting) users.
+Configured values for `roles` and `password` are required. `drush-alias` is only currently required as [DrushTestUserManager](https://github.com/pfaocle/codeception-module-drupal-user-registry/blob/master/src/Drupal/UserRegistry/DrushTestUserManager.php) is the only class available for managing (creating/deleting) users.
+
+Other optional configuration includes:
+
+* `create` and `delete` are assumed to be `false` if not set.
+* `emails` can optionally be set for any created test users, for use in tests.
 * The `root` key and its `username` and `password` are only required if `$I->getRootUser()` is used.
 
 ### Derivate usernames
