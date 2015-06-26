@@ -24,6 +24,12 @@ class CreateDeleteUsersCest
     protected $moduleConfig;
 
     /**
+     * @var FunctionalTester
+     *   Store the current Tester object.
+     */
+    protected $tester;
+
+    /**
      * @param FunctionalTester $I
      *   The Actor or StepObject being used to test.
      */
@@ -120,15 +126,9 @@ class CreateDeleteUsersCest
     {
         $this->module->_beforeSuite();
 
-        // Grab a map of role name => test user $uid from the database. This assumes the current 1-1 relationship
-        // between roles and test users.
-        $users = array();
-        foreach ($this->moduleConfig["roles"] as $role) {
-            if ($role != "Authenticated") {
-                $uid = $I->grabFromDatabase("users", "uid", array("name" => $this->getTestUsername($role)));
-                $users[$role] = $uid;
-            }
-        }
+        // Grab a mapping of role name => test user $uid from the database.
+        $this->tester = $I;
+        $users = $this->roleNameToTestUserUidMap();
 
         foreach ($this->moduleConfig["roles"] as $role) {
             if ($role != "Authenticated") {
@@ -154,15 +154,9 @@ class CreateDeleteUsersCest
 
         $module->_beforeSuite();
 
-        // Grab a map of role name => test user $uid from the database. This assumes the current 1-1 relationship
-        // between roles and test users.
-        $users = array();
-        foreach ($this->moduleConfig["roles"] as $role) {
-            if ($role != "Authenticated") {
-                $uid = $I->grabFromDatabase("users", "uid", array("name" => $this->getTestUsername($role)));
-                $users[$role] = $uid;
-            }
-        }
+        // Grab a mapping of role name => test user $uid from the database.
+        $this->tester = $I;
+        $users = $this->roleNameToTestUserUidMap();
 
         foreach ($this->moduleConfig["roles"] as $role) {
             if ($role != "Authenticated") {
@@ -179,6 +173,25 @@ class CreateDeleteUsersCest
                 ));
             }
         }
+    }
+
+    /**
+     * Return a mapping of role name => test user $uid from the database.
+     *
+     * This assumes the current 1-1 relationship between roles and test users.
+     */
+    protected function roleNameToTestUserUidMap()
+    {
+        $I = $this->tester;
+
+        $users = array();
+        foreach ($this->moduleConfig["roles"] as $role) {
+            if ($role != "Authenticated") {
+                $uid = $I->grabFromDatabase("users", "uid", array("name" => $this->getTestUsername($role)));
+                $users[$role] = $uid;
+            }
+        }
+        return $users;
     }
 
     /**
