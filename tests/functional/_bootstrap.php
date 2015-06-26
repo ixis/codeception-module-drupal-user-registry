@@ -18,4 +18,15 @@ $mockValidModuleConfig = array(
     ),
 );
 
+// Define a complete, valid configuration with email addresses for some roles.
+//
+// NOTE: don't use admin@example.com for the administrator test user, as the
+// site we're testing against has uid 1 pre-configured with this address, and
+// the test user is not created.
+$mockValidModuleConfigWithEmails = array_merge(
+    array("emails" => array("administrator" => "administrator@example.com", "editor" => "editor@example.com")),
+    $mockValidModuleConfig
+);
+
 Fixtures::add("validModuleConfig", $mockValidModuleConfig);
+Fixtures::add("validModuleConfigWithEmails", $mockValidModuleConfigWithEmails);
