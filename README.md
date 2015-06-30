@@ -79,8 +79,8 @@ modules:
         DrupalUserRegistry:
             roles: ['administrator', 'editor', 'sub editor', 'lowly-user', 'authenticated']  # A list of user roles.
             emails:
-                - administrator: 'admin@example.com'
-                - editor: 'editor@example.com'
+                administrator: 'admin@example.com'
+                editor: 'editor@example.com'
             password: 'test123!'         # The password to use for all test users.
             create: true                 # Whether to create all defined test users at the start of the suite.
             delete: true                 # Whether to delete all defined test users at the end of the suite.
