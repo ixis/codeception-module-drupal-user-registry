@@ -3,12 +3,13 @@
 #
 
 -   repo: git://github.com/pre-commit/pre-commit-hooks
-    sha: 'v0.4.1'
+    sha: 'v0.4.2'
     hooks:
     -   id: check-json
     -   id: check-yaml
     -   id: end-of-file-fixer
     -   id: trailing-whitespace
+    -   id: check-merge-conflict
 
 # Currently using a fork of https://github.com/hootsuite/pre-commit-php.
 # Fixes colors and bash syntax error on OS X.
