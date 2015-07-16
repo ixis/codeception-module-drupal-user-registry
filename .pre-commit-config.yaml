@@ -14,6 +14,7 @@
 # Currently using a fork of https://github.com/hootsuite/pre-commit-php.
 # Fixes colors and bash syntax error on OS X.
 # Refs: https://github.com/hootsuite/pre-commit-php/issues/2
+# PR: https://github.com/hootsuite/pre-commit-php/pull/4
 -   repo: git@github.com:ixisandyr/pre-commit-php.git
     sha: master
     hooks:
