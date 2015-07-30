@@ -139,8 +139,8 @@ The module provides more verbose output when used with Codeception's `--debug` o
 
 ## Contribute
 
-- Issue tracker: https://github.com/pfaocle/codeception-module-drupal-user-registry/issues
-- Source code: https://github.com/pfaocle/codeception-module-drupal-user-registry
+- Issue tracker: https://github.com/ixis/codeception-module-drupal-user-registry/issues
+- Source code: https://github.com/ixis/codeception-module-drupal-user-registry
 
 
 ## Acknowledgements
