@@ -64,7 +64,7 @@ class DrupalUserRegistry extends Module
      * @var array
      *   Required configuration.
      */
-    protected $requiredFields = ['roles', 'password'];
+    protected $requiredFields = ['users'];
 
     /**
      * @var TestUserManagerInterface
