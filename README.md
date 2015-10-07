@@ -137,6 +137,26 @@ The module provides more verbose output when used with Codeception's `--debug` o
     ...
 
 
+## Testing
+
+This module has some unit and functional tests using Codeception. Currently only
+the unit tests are run in Travis builds.
+
+To run the unit tests:
+
+    $ vendor/bin/codecept run unit
+
+The functional suite requires a Drupal 7 site set up with an open connection to
+the database as configured in **functional.suite.yml** - its best to edit the
+configuration for the **local** environment and run:
+
+    $ vendor/bin/codecept run functional --env=local
+
+To run both suites:
+
+    $ vendor/bin/codecept run --env=local
+
+
 ## Contribute
 
 - Issue tracker: https://github.com/ixis/codeception-module-drupal-user-registry/issues
