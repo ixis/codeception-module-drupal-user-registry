@@ -51,6 +51,6 @@ trait TestUsersCommandTrait
 
         $moduleConfigStorage = new ModuleConfigStorage($config);
         $this->users = $moduleConfigStorage->load();
-        $this->testUserManager = new DrushTestUserManager($config);
+        $this->testUserManager = new DrushTestUserManager($config, $moduleConfigStorage);
     }
 }
