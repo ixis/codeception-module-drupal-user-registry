@@ -30,6 +30,12 @@ class DrushTestUserManager implements TestUserManagerInterface
     protected $storage;
 
     /**
+     * @var Output
+     *   Used to print messages via Codeception's console.
+     */
+    protected $output;
+
+    /**
      * Constructor: ensure we have all the configuration values we need and store them.
      *
      * @param array $config
@@ -77,7 +83,14 @@ class DrushTestUserManager implements TestUserManagerInterface
      */
     public function createUser($user)
     {
-        Debug::debug("Trying to create test user '{$user->name}' on '{$this->alias}'.");
+        // Set a default email for the test user, but overwrite it if a
+        // custom email address has been specified in the suite configuration.
+        $email = $user->name . "@" . DrupalUserRegistry::DRUPAL_USER_EMAIL_DOMAIN;
+        if (isset($user->email)) {
+            $email = $user->email;
+        }
+
+        Debug::debug("Trying to create test user '{$user->name}' with email '{$email}' on '{$this->alias}'.");
 
         if ($this->userExists($user->name)) {
             $this->message(
@@ -91,7 +104,7 @@ class DrushTestUserManager implements TestUserManagerInterface
                 sprintf(
                     "user-create %s --mail=%s --password=%s",
                     escapeshellarg($user->name),
-                    escapeshellarg($user->name . "@" . DrupalUserRegistry::DRUPAL_USER_EMAIL_DOMAIN),
+                    escapeshellarg($email),
                     escapeshellarg($user->pass)
                 )
             );

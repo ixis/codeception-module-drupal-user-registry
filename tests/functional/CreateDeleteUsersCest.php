@@ -3,6 +3,7 @@
 use \FunctionalTester;
 
 use Codeception\Module\Drupal\UserRegistry\Storage\ModuleConfigStorage;
+use Codeception\Module\DrupalUserRegistry;
 use Codeception\Util\Fixtures;
 
 /**
@@ -21,6 +22,12 @@ class CreateDeleteUsersCest
      *   Module configuration used to initialize $this->module
      */
     protected $moduleConfig;
+
+    /**
+     * @var FunctionalTester
+     *   Store the current Tester object.
+     */
+    protected $tester;
 
     /**
      * @param FunctionalTester $I
@@ -119,15 +126,9 @@ class CreateDeleteUsersCest
     {
         $this->module->_beforeSuite();
 
-        // Grab a map of role name => test user $uid from the database. This assumes the current 1-1 relationship
-        // between roles and test users.
-        $users = array();
-        foreach ($this->moduleConfig["roles"] as $role) {
-            if ($role != "Authenticated") {
-                $uid = $I->grabFromDatabase("users", "uid", array("name" => $this->getTestUsername($role)));
-                $users[$role] = $uid;
-            }
-        }
+        // Grab a mapping of role name => test user $uid from the database.
+        $this->tester = $I;
+        $users = $this->roleNameToTestUserUidMap();
 
         foreach ($this->moduleConfig["roles"] as $role) {
             if ($role != "Authenticated") {
@@ -135,6 +136,62 @@ class CreateDeleteUsersCest
                 $I->seeInDatabase("users_roles", array("uid" => $users[$role], "rid" => $rid));
             }
         }
+    }
+
+    /**
+     * Test users are created with the correct email addresses.
+     *
+     * @param FunctionalTester $I
+     *   The Actor or StepObject being used to test.
+     */
+    public function testCreatedUsersHaveCorrectEmails(FunctionalTester $I)
+    {
+        // Don't use $this->module here, as we're using a different configuration.
+        $module = new \Codeception\Module\DrupalUserRegistry();
+        $configWithEmails = Fixtures::get("validModuleConfigWithEmails");
+        $module->_setConfig($configWithEmails);
+        $module->_initialize();
+
+        $module->_beforeSuite();
+
+        // Grab a mapping of role name => test user $uid from the database.
+        $this->tester = $I;
+        $users = $this->roleNameToTestUserUidMap();
+
+        foreach ($this->moduleConfig["roles"] as $role) {
+            if ($role != "Authenticated") {
+                // Determine whether we should look for a user configured email
+                // address, or the default one.
+                if (!array_key_exists($role, $configWithEmails["emails"])) {
+                    $email = $this->getTestUsername($role) . '@' . DrupalUserRegistry::DRUPAL_USER_EMAIL_DOMAIN;
+                } else {
+                    $email = $configWithEmails["emails"]["$role"];
+                }
+                $I->seeInDatabase("users", array(
+                    "uid" => $users[$role],
+                    "mail" => $email,
+                ));
+            }
+        }
+    }
+
+    /**
+     * Return a mapping of role name => test user $uid from the database.
+     *
+     * This assumes the current 1-1 relationship between roles and test users.
+     */
+    protected function roleNameToTestUserUidMap()
+    {
+        $I = $this->tester;
+
+        $users = array();
+        foreach ($this->moduleConfig["roles"] as $role) {
+            if ($role != "Authenticated") {
+                $uid = $I->grabFromDatabase("users", "uid", array("name" => $this->getTestUsername($role)));
+                $users[$role] = $uid;
+            }
+        }
+        return $users;
     }
 
     /**
