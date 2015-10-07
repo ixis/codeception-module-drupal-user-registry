@@ -38,7 +38,6 @@ class CreateDeleteUsersCest
         $this->module = new \Codeception\Module\DrupalUserRegistry();
         $this->moduleConfig = Fixtures::get("validModuleConfig");
         $this->module->_setConfig($this->moduleConfig);
-        $this->module->_initialize();
     }
 
     /**
@@ -72,9 +71,31 @@ class CreateDeleteUsersCest
      */
     public function testUsersAreCreated(FunctionalTester $I)
     {
+        $this->module->_initialize();
         $this->module->_beforeSuite();
         foreach ($this->moduleConfig["roles"] as $role) {
             $I->seeInDatabase("users", array("name" => $this->getTestUsername($role)));
+        }
+    }
+
+    /**
+     * Test that users are created with the correct names a configurable prefix is used.
+     *
+     * @param FunctionalTester $I
+     *   The Actor or StepObject being used to test.
+     */
+    public function testUsersAreCreatedWithCustomPrefix(FunctionalTester $I)
+    {
+        $config = $this->moduleConfig;
+        $prefix = uniqid();
+        $config["username-prefix"] = $prefix;
+        $this->module->_reconfigure($config);
+
+        $this->module->_initialize();
+        $this->module->_beforeSuite();
+
+        foreach ($this->moduleConfig["roles"] as $role) {
+            $I->seeInDatabase("users", array("name" => $this->getTestUsername($role, $prefix)));
         }
     }
 
@@ -86,6 +107,7 @@ class CreateDeleteUsersCest
      */
     public function testUsersAreDeleted(FunctionalTester $I)
     {
+        $this->module->_initialize();
         $this->module->_beforeSuite();
         $this->module->_afterSuite();
         foreach ($this->moduleConfig["roles"] as $role) {
@@ -105,6 +127,7 @@ class CreateDeleteUsersCest
         $config["delete"] = false;
         $this->module->_reconfigure($config);
 
+        $this->module->_initialize();
         $this->module->_beforeSuite();
         foreach ($this->moduleConfig["roles"] as $role) {
             $I->seeInDatabase("users", array("name" => $this->getTestUsername($role)));
@@ -124,6 +147,7 @@ class CreateDeleteUsersCest
      */
     public function testCreatedUsersHaveCorrectRoles(FunctionalTester $I)
     {
+        $this->module->_initialize();
         $this->module->_beforeSuite();
 
         // Grab a mapping of role name => test user $uid from the database.
@@ -197,18 +221,25 @@ class CreateDeleteUsersCest
     /**
      * Helper to translate role names to test usernames.
      *
-     * @todo This code is copied from ModuleConfigStorage::load(), where it's a bit buried. Needs refactoring.
+     * @todo This code relies on using ModuleConfigStorage::mapRoleToTestUser()
      *
-     * @see ModuleConfigStorage::load()
+     * @see ModuleConfigStorage::mapRoleToTestUser()
      *
      * @param string $role
      *   The name of the role to translate into a test username.
+     * @param null $prefix
+     *
      *
      * @return string
      */
-    protected function getTestUsername($role)
+    protected function getTestUsername($role, $prefix = null)
     {
-        $roleNameSuffix = preg_replace(ModuleConfigStorage::DRUPAL_ROLE_TO_USERNAME_PATTERN, ".", $role);
-        return ModuleConfigStorage::DRUPAL_USERNAME_PREFIX . "." . $roleNameSuffix;
+        $config = $this->moduleConfig;
+        if ($prefix) {
+            $config["username-prefix"] = $prefix;
+        }
+        $dummyStorage = new ModuleConfigStorage($config);
+        $testUser = $dummyStorage->mapRoleToTestUser($role);
+        return $testUser->name;
     }
 }

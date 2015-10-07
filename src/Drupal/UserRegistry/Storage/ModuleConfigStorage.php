@@ -3,6 +3,8 @@
 namespace Codeception\Module\Drupal\UserRegistry\Storage;
 
 use Codeception\Module\Drupal\UserRegistry\DrupalTestUser;
+use Codeception\Exception\Configuration as ConfigException;
+use Codeception\Exception\Module as ModuleException;
 
 /**
  * Class ModuleConfigStorage.
@@ -19,10 +21,12 @@ class ModuleConfigStorage implements StorageInterface
     const DRUPAL_ROLE_TO_USERNAME_PATTERN = '/(\s|-)/';
 
     /**
-     * This string will be used as a prefix for a test user name in conjunction with the replacement pattern above. The
-     * examples above will have usernames 'test.forum.moderator' and 'test.high.level.administrator' respectively.
+     * This string will be used as a prefix for a test user name in conjunction with the replacement pattern above.
+     *
+     * Using the default value, the examples above will have usernames 'test.forum.moderator' and
+     * 'test.high.level.administrator' respectively. This prefix can be overridden in the module's configuration.
      */
-    const DRUPAL_USERNAME_PREFIX = 'test';
+    protected $drupalUsernamePrefix = 'test';
 
     /**
      * @var array
@@ -48,12 +52,25 @@ class ModuleConfigStorage implements StorageInterface
      *
      * @param array $config
      *   Array containing the DrupalUserRegistry module configuration.
+     *
+     * @throws \Codeception\Exception\Configuration
      */
     public function __construct($config)
     {
         $this->roles = $config['roles'];
         $this->emails = isset($config['emails']) ? $config['emails'] : array();
         $this->password = $config['password'];
+
+        if (isset($config['username-prefix'])) {
+            if (strlen($config['username-prefix']) < 4) {
+                throw new ConfigException(sprintf(
+                    "Drupal username prefix should contain at least 4 characters (%s).",
+                    $config['username-prefix']
+                ));
+            } else {
+                $this->drupalUsernamePrefix = (string)$config['username-prefix'];
+            }
+        }
     }
 
     /**
@@ -63,17 +80,25 @@ class ModuleConfigStorage implements StorageInterface
      */
     public function load()
     {
-        return array_map(
-            function ($roleName) {
-                $roleNameSuffix = preg_replace(self::DRUPAL_ROLE_TO_USERNAME_PATTERN, ".", $roleName);
-                $userName = self::DRUPAL_USERNAME_PREFIX . "." . $roleNameSuffix;
+        return array_map([$this, "mapRoleToTestUser"], array_combine($this->roles, $this->roles));
+    }
 
-                // If an email address has been provided, set one.
-                $email = isset($this->emails[$roleName]) ? $this->emails[$roleName] : null;
+    /**
+     * Generate a test user name from a role name and return the corresponding DrupalTestUser object.
+     *
+     * @param string $roleName
+     *   The role for which to generate a test user.
+     *
+     * @return \Codeception\Module\Drupal\UserRegistry\DrupalTestUser
+     */
+    public function mapRoleToTestUser($roleName)
+    {
+        $roleNameSuffix = preg_replace(self::DRUPAL_ROLE_TO_USERNAME_PATTERN, ".", $roleName);
+        $userName = $this->drupalUsernamePrefix . "." . $roleNameSuffix;
 
-                return new DrupalTestUser($userName, $this->password, $roleName, $email);
-            },
-            array_combine($this->roles, $this->roles)
-        );
+        // If an email address has been provided, set one.
+        $email = isset($this->emails[$roleName]) ? $this->emails[$roleName] : null;
+
+        return new DrupalTestUser($userName, $this->password, $roleName, $email);
     }
 }

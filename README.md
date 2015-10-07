@@ -88,6 +88,7 @@ modules:
             root:
                 username: root           # Username for user with uid 1.
                 password: root           # Password for user with uid 1.
+            username-prefix: robot       # Use this string instead of the default 'test' for prefixing test usernames.
 ```
 
 ### Required and optional configuration
@@ -99,12 +100,14 @@ Other optional configuration includes:
 * `create` and `delete` are assumed to be `false` if not set.
 * `emails` can optionally be set for any created test users, for use in tests.
 * The `root` key and its `username` and `password` are only required if `$I->getRootUser()` is used.
+* `username-prefix` can be used to set the prefix used for test users' usernames, instead of the default 'test'.
 
 ### Derivate usernames
 
 Note that only a list of user roles is defined - no specific usernames. This is because we only need a single representative user account for a given role performing an acceptance test. Each role defined in configuration maps directly to a single user with username derived from the role name. For example, the configuration above would result in the following usernames: _test.administrator_, _test.editor_, _test.sub.editor_, _test.lowly.user_, _test.authenticated_.
 
-The derivative usernames are always prefixed with _test._ and have any character in the role name matching the regex `/(\s|-)/` (i.e. whitespace and hyphens) replaced with a full-stop character (`.`).
+Derivative usernames are (by default) prefixed with _test._ and have any character in the role name matching the regex `/(\s|-)/` (i.e. whitespace and hyphens) replaced with a full-stop character (`.`). The test username prefix can be configured to something other than this default using the `username-prefix` key: see _Example suite configuration_, above.
+
 
 **Caution:** no test user is created when the "root" user is configured. If the `getRootUser()` method is to be used the username and password will need to be set to working credentials, **stored in plain text**.
 
