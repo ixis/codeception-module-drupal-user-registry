@@ -26,6 +26,9 @@ use Codeception\Module\Drupal\UserRegistry\Storage\StorageInterface;
  *             url: 'http://localhost/myapp/'
  *         DrupalUserRegistry:
  *             roles: ['administrator', 'editor', 'sub editor', 'lowly-user', 'authenticated']  # A list of user roles.
+ *             emails: # A list of emails for each role. Not all roles need to have emails.
+ *               - administrator: 'admin@example.com'
+ *               - editor: 'editor@example.com'
  *             password: 'test123!'         # The password to use for all test users.
  *             create: true                 # Whether to create all defined test users at the start of the suite.
  *             delete: true                 # Whether to delete all defined test users at the end of the suite.
@@ -64,9 +67,15 @@ class DrupalUserRegistry extends Module
 
     /**
      * @var TestUserManagerInterface
-     *   Stories the manager used to create/delete users.
+     *   Stores the manager used to create/delete users.
      */
     protected $testUserManager;
+
+    /**
+     * @var StorageInterface
+     *   User storage.
+     */
+    protected $userStorage;
 
     /**
      * @var DrupalTestUser[]
@@ -87,20 +96,20 @@ class DrupalUserRegistry extends Module
     {
         // @todo Using other methods of storage, set via config (eg storage: 'ModuleConfigStorage').
         // @todo Using other methods of managing test users, set via config.
-        $this->testUserManager = new DrushTestUserManager($this->config);
-        $this->loadUsers(new ModuleConfigStorage($this->config));
+        $this->testUserManager = new DrushTestUserManager(
+            $this->config,
+            new ModuleConfigStorage($this->config)
+        );
+
+        $this->loadUsers();
     }
 
     /**
      * Loads configured DrupalTestUser objects into the registry.
-     *
-     * @param StorageInterface $storage
-     *   A Storage object defining the roles and other configuration.
      */
-    protected function loadUsers(StorageInterface $storage)
+    protected function loadUsers()
     {
-        $this->storage = $storage;
-        $this->drupalTestUsers = $storage->load();
+        $this->drupalTestUsers = $this->testUserManager->getStorage()->load();
     }
 
     /**

@@ -20,19 +20,21 @@ $mockValidModuleConfig = array(
 );
 
 // Define a configuration which is invalid solely because the drush-alias entry is missing.
-$mockInvalidModuleConfig = array(
-    "roles" => array("administrator", 'editor', 'moderator', 'Authenticated'),
-    "password" => "test123!",
-    "create" => false,
-    "delete" => false,
-    "root" => array(
-        "username" => "root",
-        "password" => "root",
-    ),
-);
+$mockInvalidModuleConfig = $mockValidModuleConfig;
+unset($mockInvalidModuleConfig["drush-alias"]);
+
+// Define a complete, valid configuration with a custom username prefix.
+$mockCustomPrefixModuleConfig = $mockValidModuleConfig;
+$mockCustomPrefixModuleConfig["username-prefix"] = "custom";
+
+// Define a complete configuration with an invalid custom username prefix.
+$mockInvalidCustomPrefixModuleConfig = $mockValidModuleConfig;
+$mockInvalidCustomPrefixModuleConfig["username-prefix"] = "xyz";
 
 Fixtures::add("validModuleConfig", $mockValidModuleConfig);
 Fixtures::add("invalidModuleConfig", $mockInvalidModuleConfig);
+Fixtures::add("customPrefixModuleConfig", $mockCustomPrefixModuleConfig);
+Fixtures::add("invalidCustomPrefixModuleConfig", $mockInvalidCustomPrefixModuleConfig);
 
 // Define a mock test user.
 $drupalTestUser = new DrupalTestUser("test.mock.user", "password", "mock");
