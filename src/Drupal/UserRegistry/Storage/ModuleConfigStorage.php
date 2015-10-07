@@ -95,6 +95,10 @@ class ModuleConfigStorage implements StorageInterface
     {
         $roleNameSuffix = preg_replace(self::DRUPAL_ROLE_TO_USERNAME_PATTERN, ".", $roleName);
         $userName = $this->drupalUsernamePrefix . "." . $roleNameSuffix;
-        return new DrupalTestUser($userName, $this->password, $roleName);
+
+        // If an email address has been provided, set one.
+        $email = isset($this->emails[$roleName]) ? $this->emails[$roleName] : null;
+
+        return new DrupalTestUser($userName, $this->password, $roleName, $email);
     }
 }
