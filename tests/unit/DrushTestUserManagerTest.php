@@ -1,8 +1,10 @@
 <?php
 
 use \Codeception\Lib\Console\Message;
-use \Codeception\Util\Fixtures;
+use \Codeception\Module\Drupal\UserRegistry\Storage\ModuleConfigStorage;
 use \Codeception\Module\Drupal\UserRegistry\DrushTestUserManager;
+use \Codeception\Util\Fixtures;
+use \Codeception\Util\Stub;
 
 /**
  * Unit tests for DrushTestUserManager class.
@@ -16,6 +18,20 @@ class DrushTestUserManagerTest extends \Codeception\TestCase\Test
     protected $tester;
 
     /**
+     * @var ModuleConfigStorage
+     *   A dummy storage object used in tests.
+     */
+    protected $storage;
+
+    /**
+     * Create a dummy ModuleConfigStorage object to use when instantiating DrushTestUserManager.
+     */
+    public function _before()
+    {
+        $this->storage = Stub::make('\Codeception\Module\Drupal\UserRegistry\Storage\ModuleConfigStorage');
+    }
+
+    /**
      * Objects of this class should be instantiable.
      *
      * @test
@@ -24,7 +40,7 @@ class DrushTestUserManagerTest extends \Codeception\TestCase\Test
     {
         $this->assertInstanceOf(
             '\Codeception\Module\Drupal\UserRegistry\DrushTestUserManager',
-            new DrushTestUserManager(Fixtures::get("validModuleConfig"))
+            new DrushTestUserManager(Fixtures::get("validModuleConfig"), $this->storage)
         );
     }
 
@@ -37,7 +53,7 @@ class DrushTestUserManagerTest extends \Codeception\TestCase\Test
             '\Codeception\Exception\Configuration',
             "Please configure the drush-alias setting in your suite configuration."
         );
-        new DrushTestUserManager(array());
+        new DrushTestUserManager(array(), $this->storage);
     }
 
     /**
@@ -49,7 +65,7 @@ class DrushTestUserManagerTest extends \Codeception\TestCase\Test
             '\Codeception\Exception\Configuration',
             "Please configure the drush-alias setting in your suite configuration."
         );
-        new DrushTestUserManager(Fixtures::get("invalidModuleConfig"));
+        new DrushTestUserManager(Fixtures::get("invalidModuleConfig"), $this->storage);
     }
 
     /**
@@ -79,7 +95,7 @@ class DrushTestUserManagerTest extends \Codeception\TestCase\Test
             '\Codeception\Module\Drupal\UserRegistry\DrushTestUserManager',
             "message"
         );
-        $testUserManager = new DrushTestUserManager(Fixtures::get("validModuleConfig"));
+        $testUserManager = new DrushTestUserManager(Fixtures::get("validModuleConfig"), $this->storage);
 
         $expected = new Codeception\Lib\Console\Message($message, $output);
         $actual = $refMethod->invokeArgs($testUserManager, array($message));
@@ -96,7 +112,7 @@ class DrushTestUserManagerTest extends \Codeception\TestCase\Test
      */
     public function testPrepareDrushCommand()
     {
-        $testUserManager = new DrushTestUserManager(Fixtures::get("validModuleConfig"));
+        $testUserManager = new DrushTestUserManager(Fixtures::get("validModuleConfig"), $this->storage);
         $refMethod = \Codeception\Module\UnitHelper::getNonPublicMethod(
             '\Codeception\Module\Drupal\UserRegistry\DrushTestUserManager',
             "prepareDrushCommand"

@@ -1,5 +1,5 @@
 {
-    "name": "pfaocle/codeception-module-drupal-user-registry",
+    "name": "ixis/codeception-module-drupal-user-registry",
     "description": "A Codeception module for managing test users.",
     "license": "MIT",
     "authors": [
@@ -16,7 +16,7 @@
 
     "require-dev": {
         "codeception/codeception": "~2.0.8",
-        "codegyre/robo": "~0.4.6"
+        "codegyre/robo": "~0.5.2"
     },
 
     "autoload": {

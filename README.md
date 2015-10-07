@@ -3,7 +3,7 @@ Drupal User Registry
 
 ## A Codeception module for managing test users
 
-[![Build Status](https://travis-ci.org/pfaocle/codeception-module-drupal-user-registry.svg?branch=feature/add-tests)](https://travis-ci.org/pfaocle/codeception-module-drupal-user-registry)
+[![Build Status](https://travis-ci.org/ixis/codeception-module-drupal-user-registry.svg?branch=feature/add-tests)](https://travis-ci.org/ixis/codeception-module-drupal-user-registry) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ixis/codeception-module-drupal-user-registry/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/pfaocle/codeception-module-drupal-user-registry/?branch=master) [![Latest Stable Version](https://poser.pugx.org/pfaocle/codeception-module-drupal-user-registry/v/stable.svg)](https://packagist.org/packages/pfaocle/codeception-module-drupal-user-registry) [![Latest unstable version](https://poser.pugx.org/pfaocle/codeception-module-drupal-user-registry/v/unstable.svg)](https://packagist.org/packages/pfaocle/codeception-module-drupal-user-registry) [![Total Downloads](https://poser.pugx.org/pfaocle/codeception-module-drupal-user-registry/downloads)](https://packagist.org/packages/pfaocle/codeception-module-drupal-user-registry) [![License](https://poser.pugx.org/pfaocle/codeception-module-drupal-user-registry/license.svg)](https://packagist.org/packages/pfaocle/codeception-module-drupal-user-registry)
 
 _Drupal User Registry_ is a [Codeception module](http://codeception.com/addons) for managing test users on [Drupal](https://www.drupal.org/) sites. It can be configured to automatically create users before and delete users after a suite run.
 
@@ -56,7 +56,7 @@ This module is available on [Packagist](https://packagist.org/packages/pfaocle/c
 {
     "require": {
         "codeception/codeception": "2.0.*",
-        "pfaocle/codeception-module-drupal-user-registry": "dev-master"
+        "ixis/codeception-module-drupal-user-registry": "dev-master"
     }
 }
 ```
@@ -78,6 +78,9 @@ modules:
             url: 'http://localhost/myapp/'
         DrupalUserRegistry:
             roles: ['administrator', 'editor', 'sub editor', 'lowly-user', 'authenticated']  # A list of user roles.
+            emails:
+                administrator: 'admin@example.com'
+                editor: 'editor@example.com'
             password: 'test123!'         # The password to use for all test users.
             create: true                 # Whether to create all defined test users at the start of the suite.
             delete: true                 # Whether to delete all defined test users at the end of the suite.
@@ -88,11 +91,14 @@ modules:
             username-prefix: robot       # Use this string instead of the default 'test' for prefixing test usernames.
 ```
 
-### Required configuration
+### Required and optional configuration
 
-* Configuration values for `roles` and `password` are required.
-* `create` and `delete` are optional and are assumed to be `false` if not set.
-* `drush-alias` is only currently required as [DrushTestUserManager](https://github.com/pfaocle/codeception-module-drupal-user-registry/blob/master/src/Drupal/UserRegistry/DrushTestUserManager.php) is the only class available for managing (creating/deleting) users.
+Configured values for `roles` and `password` are required. `drush-alias` is only currently required as [DrushTestUserManager](https://github.com/pfaocle/codeception-module-drupal-user-registry/blob/master/src/Drupal/UserRegistry/DrushTestUserManager.php) is the only class available for managing (creating/deleting) users.
+
+Other optional configuration includes:
+
+* `create` and `delete` are assumed to be `false` if not set.
+* `emails` can optionally be set for any created test users, for use in tests.
 * The `root` key and its `username` and `password` are only required if `$I->getRootUser()` is used.
 * `username-prefix` can be used to set the prefix used for test users' usernames, instead of the default 'test'.
 
@@ -133,10 +139,30 @@ The module provides more verbose output when used with Codeception's `--debug` o
     ...
 
 
+## Testing
+
+This module has some unit and functional tests using Codeception. Currently only
+the unit tests are run in Travis builds.
+
+To run the unit tests:
+
+    $ vendor/bin/codecept run unit
+
+The functional suite requires a Drupal 7 site set up with an open connection to
+the database as configured in **functional.suite.yml** - its best to edit the
+configuration for the **local** environment and run:
+
+    $ vendor/bin/codecept run functional --env=local
+
+To run both suites:
+
+    $ vendor/bin/codecept run --env=local
+
+
 ## Contribute
 
-- Issue tracker: https://github.com/pfaocle/codeception-module-drupal-user-registry/issues
-- Source code: https://github.com/pfaocle/codeception-module-drupal-user-registry
+- Issue tracker: https://github.com/ixis/codeception-module-drupal-user-registry/issues
+- Source code: https://github.com/ixis/codeception-module-drupal-user-registry
 
 
 ## Acknowledgements

@@ -41,6 +41,13 @@ class ModuleConfigStorage implements StorageInterface
     protected $password;
 
     /**
+     * Indexed array of email addresses, where the key is the role name.
+     *
+     * @var string
+     */
+    protected $emails;
+
+    /**
      * Check for required module configuration and initialize.
      *
      * @param array $config
@@ -51,6 +58,7 @@ class ModuleConfigStorage implements StorageInterface
     public function __construct($config)
     {
         $this->roles = $config['roles'];
+        $this->emails = isset($config['emails']) ? $config['emails'] : array();
         $this->password = $config['password'];
 
         if (isset($config['username-prefix'])) {

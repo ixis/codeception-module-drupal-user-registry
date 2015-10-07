@@ -2,6 +2,8 @@
 
 namespace Codeception\Module\Drupal\UserRegistry;
 
+use Codeception\Module\Drupal\UserRegistry\Storage\StorageInterface;
+
 /**
  * Interface TestUserManagerInterface.
  *
@@ -10,10 +12,28 @@ namespace Codeception\Module\Drupal\UserRegistry;
 interface TestUserManagerInterface
 {
     /**
+     * Gets the storage object.
+     *
+     * @return StorageInterface
+     *   The Storage object currently set.
+     */
+    public function getStorage();
+
+    /**
+     * Set the storage object.
+     *
+     * @param StorageInterface $storage
+     *   The Storage object to set.
+     */
+    public function setStorage(StorageInterface $storage);
+
+    /**
      * Create a test user.
      *
      * @param DrupalTestUser $user
      *   The user to create.
+     *
+     * @return void
      */
     public function createUser($user);
 
@@ -22,6 +42,8 @@ interface TestUserManagerInterface
      *
      * @param array $users
      *   An array of DrupalTestUser objects to create.
+     *
+     * @return void
      */
     public function createUsers($users);
 
@@ -30,6 +52,8 @@ interface TestUserManagerInterface
      *
      * @param DrupalTestUser $user
      *   The user to delete.
+     *
+     * @return void
      */
     public function deleteUser($user);
 
@@ -38,6 +62,8 @@ interface TestUserManagerInterface
      *
      * @param array $users
      *   An array of DrupalTestUser objects to delete.
+     *
+     * @return void
      */
     public function deleteUsers($users);
 

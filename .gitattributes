@@ -1,0 +1,8 @@
+#
+# .gitattributes for Drupal User Registry Codeception module.
+#
+tests/ export-ignore
+docs/ export-ignore
+
+# Auto detect text files and perform LF normalization
+* text=auto
