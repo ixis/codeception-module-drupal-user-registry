@@ -7,6 +7,7 @@ use Codeception\Exception\Module as ModuleException;
 use Codeception\Lib\Console\Message;
 use Codeception\Lib\Console\Output;
 use Codeception\Module\DrupalUserRegistry;
+use Codeception\Module\Drupal\UserRegistry\Storage\StorageInterface;
 use Codeception\Util\Debug;
 
 /**
@@ -23,6 +24,12 @@ class DrushTestUserManager implements TestUserManagerInterface
     protected $alias;
 
     /**
+     * @var StorageInterface
+     *   Storage object containing configured users/roles to manage.
+     */
+    protected $storage;
+
+    /**
      * @var Output
      *   Used to print messages via Codeception's console.
      */
@@ -33,16 +40,40 @@ class DrushTestUserManager implements TestUserManagerInterface
      *
      * @param array $config
      *   The DrupalUserRegistry module configuration.
+     * @param StorageInterface $storage
+     *   Storage object for the list of users/roles.
      *
-     * @throws \Codeception\Exception\Configuration
+     * @throws ConfigurationException
      */
-    public function __construct($config)
+    public function __construct($config, StorageInterface $storage)
     {
+        $this->storage = $storage;
+
         if (!isset($config['drush-alias'])) {
             throw new ConfigurationException("Please configure the drush-alias setting in your suite configuration.");
         }
         $this->alias = $config['drush-alias'];
         $this->output = new Output(array());
+    }
+
+    /**
+     * Gets the storage object.
+     *
+     * {@inheritdoc}
+     */
+    public function getStorage()
+    {
+        return $this->storage;
+    }
+
+    /**
+     * Sets the storage object.
+     *
+     * {@inheritdoc}
+     */
+    public function setStorage(StorageInterface $storage)
+    {
+        $this->storage = $storage;
     }
 
     /**

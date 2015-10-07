@@ -96,20 +96,20 @@ class DrupalUserRegistry extends Module
     {
         // @todo Using other methods of storage, set via config (eg storage: 'ModuleConfigStorage').
         // @todo Using other methods of managing test users, set via config.
-        $this->testUserManager = new DrushTestUserManager($this->config);
-        $this->loadUsers(new ModuleConfigStorage($this->config));
+        $this->testUserManager = new DrushTestUserManager(
+            $this->config,
+            new ModuleConfigStorage($this->config)
+        );
+
+        $this->loadUsers();
     }
 
     /**
      * Loads configured DrupalTestUser objects into the registry.
-     *
-     * @param StorageInterface $storage
-     *   A Storage object defining the roles and other configuration.
      */
-    protected function loadUsers(StorageInterface $storage)
+    protected function loadUsers()
     {
-        $this->userStorage = $storage;
-        $this->drupalTestUsers = $storage->load();
+        $this->drupalTestUsers = $this->testUserManager->getStorage()->load();
     }
 
     /**
