@@ -50,7 +50,7 @@ This module currently uses Drush and Drush aliases to create, delete and add rol
 
 ## Installation
 
-This module is available on [Packagist](https://packagist.org/packages/pfaocle/codeception-module-drupal-user-registry) and can be installed with Composer:
+This module is available on [Packagist](https://packagist.org/packages/ixis/codeception-module-drupal-user-registry) and can be installed with Composer:
 
 ```json
 {
