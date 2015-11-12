@@ -1,6 +1,7 @@
 <?php
 
 use \Codeception\Lib\Console\Message;
+use Codeception\Module\Drupal\UserRegistry\DrupalTestUser;
 use \Codeception\Module\Drupal\UserRegistry\Storage\ModuleConfigStorage;
 use \Codeception\Module\Drupal\UserRegistry\DrushTestUserManager;
 use \Codeception\Util\Fixtures;
@@ -129,5 +130,34 @@ class DrushTestUserManagerTest extends \Codeception\TestCase\Test
             $refMethod->invokeArgs($testUserManager, array("")),
             "Returned prepared command was not as expected."
         );
+    }
+
+    /**
+     * Test deleteUser() escapes the username argument to the drush command.
+     *
+     * @see https://github.com/ixis/codeception-module-drupal-user-registry/issues/15
+     */
+    public function testDeleteUserEscapesUserArgumentToDrushCommand()
+    {
+        $mockStorage = $this->getMockBuilder('Codeception\Module\Drupal\UserRegistry\Storage\StorageInterface')
+            ->getMock();
+
+        $mock = $this->getMockBuilder('\Codeception\Module\Drupal\UserRegistry\DrushTestUserManager')
+            ->setConstructorArgs(
+                array(
+                    array('drush-alias' => 'dummy'),
+                    $mockStorage
+                )
+            )
+            ->setMethods(array("runDrush"))
+            ->getMock();
+
+        $mock->expects($this->once())
+            ->method("runDrush")
+            ->with($this->matchesRegularExpression('/(["\'])a user name\1/'));
+
+        $user = new DrupalTestUser("a user name", "password");
+
+        $mock->deleteUser($user);
     }
 }

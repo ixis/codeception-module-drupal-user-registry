@@ -141,11 +141,11 @@ class DrushTestUserManager implements TestUserManagerInterface
      */
     public function deleteUser($user)
     {
-        $this->message("Deleting test user {$user->name} on {$this->alias}.")->writeln();
+        $this->message("Deleting test user '{$user->name}' on {$this->alias}.")->writeln();
         $this->runDrush(
             sprintf(
                 "user-cancel %s --delete-content",
-                $user->name
+                escapeshellarg($user->name)
             )
         );
     }
