@@ -183,8 +183,10 @@ class DrupalUserRegistry extends Module
      * Preparation done before a suite is run: create all test users set in storage, if configured to do so.
      *
      * @codeCoverageIgnore
+     *
+     * {@inheritdoc}
      */
-    public function _beforeSuite()
+    public function _beforeSuite($settings = array())
     {
         $this->manageTestUsers('create');
     }
