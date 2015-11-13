@@ -3,6 +3,7 @@
 namespace Codeception\Module;
 
 use Codeception\Exception\Module as ModuleException;
+use Codeception\Exception;
 use Codeception\Module;
 use Codeception\Module\Drupal\UserRegistry\DrupalTestUser;
 use Codeception\Module\Drupal\UserRegistry\DrushTestUserManager;
@@ -254,5 +255,55 @@ class DrupalUserRegistry extends Module
     public function removeLoggedInUser()
     {
         $this->loggedInUser = null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function validateConfig()
+    {
+        parent::validateConfig();
+
+        // If windows, certain chars cannot be passed safely as
+        // an argument.
+        // See escapeshellarg().
+        // See https://github.com/ixis/codeception-module-drupal-user-registry/issues/13
+        if (!$this->isWindows()) {
+            return;
+        }
+
+        $chars = array('!', '%', '"');
+
+        $values = array_merge(
+            array($this->config['password']),
+            $this->config['roles']
+        );
+
+        foreach ($values as $value) {
+            $present = array_filter($chars, function ($char) use ($value) {
+                    return strpos($value, $char) !== false;
+            });
+
+            if ($present) {
+                throw new Exception\ModuleConfig(
+                    get_class($this),
+                    sprintf(
+                        "\nOn windows, the characters %s cannot be used for %s\n\n",
+                        implode(", ", $chars),
+                        implode(", ", array("roles", "password"))
+                    )
+                );
+            }
+        }
+    }
+
+    /**
+     * Are we running under windows?
+     *
+     * @return bool
+     */
+    protected function isWindows()
+    {
+        return DIRECTORY_SEPARATOR === '\\';
     }
 }
