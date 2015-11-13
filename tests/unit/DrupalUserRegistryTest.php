@@ -80,4 +80,74 @@ class DrupalUserRegistryTest extends \Codeception\TestCase\Test
         );
         $refMethod->invokeArgs($this->module, array("not-an-op"));
     }
+
+    /**
+     * @dataProvider charData
+     */
+    public function testConstructorThrowsExceptionIfBadCharsUsed($char, $role, $expected)
+    {
+        if ($expected) {
+            $this->setExpectedException('\Codeception\Exception\ModuleConfig');
+        }
+
+        $config = array(
+            "roles" => array($role),
+            "password" => $char
+        );
+
+        // Mock the class we are testing as we need to mock isWindows method.
+        // No other methods are mocked.
+        $mock = $this->getMockBuilder('Codeception\Module\DrupalUserRegistry')
+            ->setMethods(array("isWindows"))
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $mock->method("isWindows")
+            ->willReturn(true);
+
+        $mock->__construct($config);
+    }
+
+    /**
+     * @dataProvider charData
+     */
+    public function testConstructorDoesNotThrowExceptionIfBadCharsUsedOnLinux($char, $role)
+    {
+        $config = array(
+            "roles" => array($role),
+            "password" => $char
+        );
+
+        // Mock the class we are testing as we need to mock isWindows method.
+        // No other methods are mocked.
+        $mock = $this->getMockBuilder('Codeception\Module\DrupalUserRegistry')
+            ->setMethods(array("isWindows"))
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $mock->method("isWindows")
+            ->willReturn(false);
+
+        $mock->__construct($config);
+    }
+
+    /**
+     * Provide data for testConstructorThrowsExceptionIfBadCharsUsed
+     *
+     * @return array
+     *  First element is a password, 2nd is role, the 3rd is whether it should
+     *  be accepted or not on windows.
+     */
+    public function charData()
+    {
+        return array(
+            array('!', 'admin', true),
+            array('"', 'admin', true),
+            array('%', 'admin', true),
+            array('a', 'admin!', true),
+            array('a', 'admin"', true),
+            array('a', 'admin%', true),
+            array('a', 'admin', false),
+        );
+    }
 }
