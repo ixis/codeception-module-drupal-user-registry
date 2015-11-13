@@ -286,7 +286,7 @@ class DrupalUserRegistry extends Module
                     return strpos($value, $char) !== false;
             });
 
-            if ($present) {
+            if (!empty($present)) {
                 throw new Exception\ModuleConfig(
                     get_class($this),
                     sprintf(
