@@ -124,7 +124,7 @@ class DrupalUserRegistryApiTest extends \Codeception\TestCase\Test
     public function testGetUserByRole()
     {
         $this->initialise();
-        $expected = new DrupalTestUser("test.administrator", "test123!", "administrator");
+        $expected = new DrupalTestUser("test.administrator", "foo", "administrator");
         $this->assertTestUsersEqual($expected, $this->module->getUserByRole("administrator"));
     }
 
