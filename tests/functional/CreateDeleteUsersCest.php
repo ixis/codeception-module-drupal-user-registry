@@ -79,27 +79,6 @@ class CreateDeleteUsersCest
     }
 
     /**
-     * Test that users are created with the correct names a configurable prefix is used.
-     *
-     * @param FunctionalTester $I
-     *   The Actor or StepObject being used to test.
-     */
-    public function testUsersAreCreatedWithCustomPrefix(FunctionalTester $I)
-    {
-        $config = $this->moduleConfig;
-        $prefix = uniqid();
-        $config["username-prefix"] = $prefix;
-        $this->module->_reconfigure($config);
-
-        $this->module->_initialize();
-        $this->module->_beforeSuite();
-
-        foreach ($this->moduleConfig["roles"] as $role) {
-            $I->seeInDatabase("users", array("name" => $this->getTestUsername($role, $prefix)));
-        }
-    }
-
-    /**
      * Test users are deleted when create = true and delete = true.
      *
      * @param FunctionalTester $I
