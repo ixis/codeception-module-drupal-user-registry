@@ -91,8 +91,12 @@ class DrupalUserRegistryTest extends \Codeception\TestCase\Test
         }
 
         $config = array(
-            "roles" => array($role),
-            "password" => $char
+            "users" => array(
+                $role => array(
+                    "name" => $role,
+                    "pass" => $char,
+                ),
+            ),
         );
 
         // Mock the class we are testing as we need to mock isWindows method.
@@ -114,10 +118,13 @@ class DrupalUserRegistryTest extends \Codeception\TestCase\Test
     public function testConstructorDoesNotThrowExceptionIfBadCharsUsedOnLinux($char, $role)
     {
         $config = array(
-            "roles" => array($role),
-            "password" => $char
+            "users" => array(
+                $role => array(
+                    "name" => $role,
+                    "pass" => $char,
+                ),
+            ),
         );
-
         // Mock the class we are testing as we need to mock isWindows method.
         // No other methods are mocked.
         $mock = $this->getMockBuilder('Codeception\Module\DrupalUserRegistry')
