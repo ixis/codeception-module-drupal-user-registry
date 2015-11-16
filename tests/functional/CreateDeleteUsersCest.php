@@ -73,8 +73,8 @@ class CreateDeleteUsersCest
     {
         $this->module->_initialize();
         $this->module->_beforeSuite();
-        foreach ($this->moduleConfig["roles"] as $role) {
-            $I->seeInDatabase("users", array("name" => $this->getTestUsername($role)));
+        foreach ($this->moduleConfig["users"] as $user) {
+            $I->seeInDatabase("users", array("name" => $user["name"]));
         }
     }
 
@@ -110,8 +110,8 @@ class CreateDeleteUsersCest
         $this->module->_initialize();
         $this->module->_beforeSuite();
         $this->module->_afterSuite();
-        foreach ($this->moduleConfig["roles"] as $role) {
-            $I->dontSeeInDatabase("users", array("name" => $this->getTestUsername($role)));
+        foreach ($this->moduleConfig["users"] as $user) {
+            $I->dontSeeInDatabase("users", array("name" => $user["name"]));
         }
     }
 
