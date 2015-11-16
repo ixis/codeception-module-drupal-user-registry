@@ -172,32 +172,18 @@ class CreateDeleteUsersCest
      */
     public function testCreatedUsersHaveCorrectEmails(FunctionalTester $I)
     {
-        // Don't use $this->module here, as we're using a different configuration.
-        $module = new \Codeception\Module\DrupalUserRegistry();
-        $configWithEmails = Fixtures::get("validModuleConfigWithEmails");
-        $module->_setConfig($configWithEmails);
-        $module->_initialize();
-
-        $module->_beforeSuite();
+        $this->module->_initialize();
+        $this->module->_beforeSuite();
 
         // Grab a mapping of role name => test user $uid from the database.
         $this->tester = $I;
-        $users = $this->roleNameToTestUserUidMap();
+        $createdUsers = $this -> usernameToTestUserUidMap();
 
-        foreach ($this->moduleConfig["roles"] as $role) {
-            if ($role != "Authenticated") {
-                // Determine whether we should look for a user configured email
-                // address, or the default one.
-                if (!array_key_exists($role, $configWithEmails["emails"])) {
-                    $email = $this->getTestUsername($role) . '@' . DrupalUserRegistry::DRUPAL_USER_EMAIL_DOMAIN;
-                } else {
-                    $email = $configWithEmails["emails"]["$role"];
-                }
-                $I->seeInDatabase("users", array(
-                    "uid" => $users[$role],
-                    "mail" => $email,
-                ));
-            }
+        foreach ($this->moduleConfig["users"] as $user) {
+            $I->seeInDatabase("users", array(
+                "uid" => $createdUsers[$user["name"]],
+                "mail" => $user["email"],
+            ));
         }
     }
 
