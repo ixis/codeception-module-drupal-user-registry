@@ -150,14 +150,16 @@ class CreateDeleteUsersCest
         $this->module->_initialize();
         $this->module->_beforeSuite();
 
-        // Grab a mapping of role name => test user $uid from the database.
+        // Grab a mapping of username => test user $uid from the database.
         $this->tester = $I;
-        $users = $this->roleNameToTestUserUidMap();
+        $createdUsers = $this->usernameToTestUserUidMap();
 
-        foreach ($this->moduleConfig["roles"] as $role) {
-            if ($role != "Authenticated") {
-                $rid = $I->grabFromDatabase("role", "rid", array("name" => $role));
-                $I->seeInDatabase("users_roles", array("uid" => $users[$role], "rid" => $rid));
+        foreach ($this->moduleConfig["users"] as $user) {
+            foreach ($user["roles"] as $role) {
+                if ($role != "Authenticated") {
+                    $rid = $I->grabFromDatabase("role", "rid", array("name" => $role));
+                    $I->seeInDatabase("users_roles", array("uid" => $createdUsers[$user["name"]], "rid" => $rid));
+                }
             }
         }
     }
@@ -214,6 +216,21 @@ class CreateDeleteUsersCest
                 $uid = $I->grabFromDatabase("users", "uid", array("name" => $this->getTestUsername($role)));
                 $users[$role] = $uid;
             }
+        }
+        return $users;
+    }
+
+    /**
+     * Return a mapping of username => test user $uid from the database.
+     */
+    protected function usernameToTestUserUidMap()
+    {
+        $I = $this->tester;
+
+        $users = array();
+        foreach ($this->moduleConfig["users"] as $user) {
+            $uid = $I->grabFromDatabase("users", "uid", array("name" => $user["name"]));
+            $users[$user["name"]] = $uid;
         }
         return $users;
     }
