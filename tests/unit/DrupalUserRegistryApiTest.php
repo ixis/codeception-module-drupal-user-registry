@@ -136,7 +136,7 @@ class DrupalUserRegistryApiTest extends \Codeception\TestCase\Test
     public function testGetRoles()
     {
         $this->initialise();
-        $expected = ["administrator", "editor", "moderator", "Authenticated"];
+        $expected = ["administrator", "editor", "moderator"];
         $this->assertEquals($expected, $this->module->getRoles());
 
     }
