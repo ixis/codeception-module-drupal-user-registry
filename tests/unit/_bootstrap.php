@@ -8,15 +8,30 @@ use \Codeception\Module\Drupal\UserRegistry\DrupalTestUser;
 
 // Define a complete, valid configuration identical to that configured in the functional suite.
 $mockValidModuleConfig = array(
-    "roles" => array("administrator", 'editor', 'moderator', 'Authenticated'),
-    "password" => "test123!",
     "create" => false,
     "delete" => false,
-    "drush-alias" => "@d7.local",
-    "root" => array(
-        "username" => "root",
-        "password" => "root",
+    "users" => array(
+        "administrator" => array(
+            "name" => "test.administrator",
+            "email" => "test.administrator@example.com",
+            "pass" => "foo",
+            "roles" => array("administrator", "editor"),
+            "root" => true,
+        ),
+        "editor" => array(
+            "name" => "test.editor",
+            "email" => "test.editor@example.com",
+            "pass" => "foo",
+            "roles" => array("editor", "moderator"),
+        ),
+        "moderator" => array(
+            "name" => "test.moderator",
+            "email" => "test.moderator@example.com",
+            "pass" => "foo",
+            "roles" => array("moderator"),
+        ),
     ),
+    "drush-alias" => "@d7.local",
 );
 
 // Define a configuration which is invalid solely because the drush-alias entry is missing.
