@@ -167,25 +167,6 @@ class CreateDeleteUsersCest
     }
 
     /**
-     * Return a mapping of role name => test user $uid from the database.
-     *
-     * This assumes the current 1-1 relationship between roles and test users.
-     */
-    protected function roleNameToTestUserUidMap()
-    {
-        $I = $this->tester;
-
-        $users = array();
-        foreach ($this->moduleConfig["roles"] as $role) {
-            if ($role != "Authenticated") {
-                $uid = $I->grabFromDatabase("users", "uid", array("name" => $this->getTestUsername($role)));
-                $users[$role] = $uid;
-            }
-        }
-        return $users;
-    }
-
-    /**
      * Return a mapping of username => test user $uid from the database.
      */
     protected function usernameToTestUserUidMap()
@@ -198,30 +179,5 @@ class CreateDeleteUsersCest
             $users[$user["name"]] = $uid;
         }
         return $users;
-    }
-
-    /**
-     * Helper to translate role names to test usernames.
-     *
-     * @todo This code relies on using ModuleConfigStorage::mapRoleToTestUser()
-     *
-     * @see ModuleConfigStorage::mapRoleToTestUser()
-     *
-     * @param string $role
-     *   The name of the role to translate into a test username.
-     * @param null $prefix
-     *
-     *
-     * @return string
-     */
-    protected function getTestUsername($role, $prefix = null)
-    {
-        $config = $this->moduleConfig;
-        if ($prefix) {
-            $config["username-prefix"] = $prefix;
-        }
-        $dummyStorage = new ModuleConfigStorage($config);
-        $testUser = $dummyStorage->mapRoleToTestUser($role);
-        return $testUser->name;
     }
 }
