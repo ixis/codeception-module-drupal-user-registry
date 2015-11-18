@@ -51,6 +51,7 @@ class DrupalUserRegistryApiTest extends \Codeception\TestCase\Test
         $this->tester->amGoingTo("check the returned data is as expected");
         $this->assertEquals("test.administrator", $rootUser->name, "Usernames did not match.");
         $this->assertEquals("foo", $rootUser->pass, "Passwords did not match.");
+        $this->assertTrue($rootUser->isRoot, "root user is not flagged as being root");
     }
 
     /**
