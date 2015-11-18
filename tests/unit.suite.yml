@@ -4,30 +4,3 @@
 class_name: UnitTester
 modules:
     enabled: [UnitHelper]
-    config:
-        DrupalUserRegistry:
-            users:
-                administrator:
-                    name: "test.administrator"
-                    email: "test.administrator@example.com"
-                    pass: "foo"
-                    roles: ["administrator", "editor"]
-                    root: true
-                editor:
-                    name: "test.editor"
-                    email: "test.editor@example.com"
-                    pass: "foo"
-                    roles: ["editor", "moderator"]
-                moderator:
-                    name: "test.moderator"
-                    email: "test.moderator@example.com"
-                    pass: "foo"
-                    roles: ["moderator"]
-                Authenticated:
-                    name: "test.Authenticated"
-                    email: "test.authenticated@example.com"
-                    pass: "foo"
-                    roles: []
-            create: false
-            delete: false
-            drush-alias: '@d7.local'
