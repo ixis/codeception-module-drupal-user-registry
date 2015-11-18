@@ -54,43 +54,20 @@ class DrupalUserRegistryApiTest extends \Codeception\TestCase\Test
     }
 
     /**
-     * Test the expected exceptions are thrown when the module is not configured enough to uset getRootUser()
+     * Test getRootUser() returns false when there is no root user configured.
      *
      * @group api
      */
-    public function testGetRootUserThrowsExceptionWhenUsernameNotConfigured()
+    public function testGetRootUserReturnsFalseWhenNotConfigured()
     {
-        $this->getRootUserMisconfigure(["username"]);
-        $this->getRootUserMisconfigure(["password"]);
-        $this->getRootUserMisconfigure(["username", "password"]);
-    }
-
-    /**
-     * Helper for testGetRootUserThrowsExceptionWhenUsernameNotConfigured()
-     *
-     * @param array $keysToUnset
-     *   List of keys to unset from $config["root"] array.
-     *
-     * @throws \Codeception\Exception\Module
-     */
-    protected function getRootUserMisconfigure($keysToUnset)
-    {
-        // Grab a valid module configuration but remove the root user's username.
+        // Grab a valid module configuration but remove any configured root user.
         $config = Fixtures::get("validModuleConfig");
-
-        foreach ($keysToUnset as $keyToUnset) {
-            unset($config["root"][$keyToUnset]);
-        }
+        unset($config["users"]["administrator"]["root"]);
 
         $this->module = new \Codeception\Module\DrupalUserRegistry();
         $this->module->_setConfig($config);
         $this->module->_initialize();
-
-        $this->setExpectedException(
-            '\Codeception\Exception\Module',
-            "Credentials for the root user (username, password) are not configured."
-        );
-        $this->module->getRootUser();
+        $this->assertFalse($this->module->getRootUser(), "getRootUser() did not return false");
     }
 
     /**
