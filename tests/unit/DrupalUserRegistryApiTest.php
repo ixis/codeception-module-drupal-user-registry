@@ -31,7 +31,7 @@ class DrupalUserRegistryApiTest extends \Codeception\TestCase\Test
      */
     protected function initialise()
     {
-        $this->module = new \Codeception\Module\DrupalUserRegistry();
+        $this->module = new DrupalUserRegistry();
         $this->module->_setConfig(Fixtures::get("validModuleConfig"));
         $this->module->_initialize();
     }
@@ -65,7 +65,7 @@ class DrupalUserRegistryApiTest extends \Codeception\TestCase\Test
         $config = Fixtures::get("validModuleConfig");
         unset($config["users"]["administrator"]["root"]);
 
-        $this->module = new \Codeception\Module\DrupalUserRegistry();
+        $this->module = new DrupalUserRegistry();
         $this->module->_setConfig($config);
         $this->module->_initialize();
         $this->assertFalse($this->module->getRootUser(), "getRootUser() did not return false");
