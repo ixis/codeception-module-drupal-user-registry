@@ -124,7 +124,7 @@ class DrupalUserRegistry extends Module
      */
     public function getUser($name)
     {
-        return isset($this->drupalTestUsers[$name]) ? $this->drupalTestUsers['name'] : false;
+        return isset($this->drupalTestUsers[$name]) ? $this->drupalTestUsers[$name] : false;
     }
 
     /**
