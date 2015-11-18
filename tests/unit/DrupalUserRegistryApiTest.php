@@ -46,16 +46,11 @@ class DrupalUserRegistryApiTest extends \Codeception\TestCase\Test
     public function testGetRootUser()
     {
         $this->initialise();
-        $config = Fixtures::get("validModuleConfig");
         $rootUser = $this->module->getRootUser();
 
         $this->tester->amGoingTo("check the returned data is as expected");
-        // @todo Convert $config to DrupalTestUser, in order to use assertTestUsersEqual() helper.
-        $this->assertEquals($config["root"]["username"], $rootUser->name, "Usernames did not match.");
-        $this->assertEquals($config["root"]["password"], $rootUser->pass, "Passwords did not match.");
-
-        // Role for root user is always null.
-        $this->assertNull($rootUser->roleName, "Role name was not null.");
+        $this->assertEquals("test.administrator", $rootUser->name, "Usernames did not match.");
+        $this->assertEquals("foo", $rootUser->pass, "Passwords did not match.");
     }
 
     /**
