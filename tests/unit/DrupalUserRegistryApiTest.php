@@ -107,7 +107,7 @@ class DrupalUserRegistryApiTest extends \Codeception\TestCase\Test
     {
         $this->initialise();
 
-        $expected = new DrupalTestUser("test.administrator", "test123!", "administrator");
+        $expected = new DrupalTestUser("test.administrator", "foo", array("administrator"));
         $this->assertTestUsersEqual($expected, $this->module->getUser("test.administrator"));
 
         $this->assertFalse(
