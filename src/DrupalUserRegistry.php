@@ -284,10 +284,31 @@ class DrupalUserRegistry extends Module
 
         $chars = array('!', '%', '"');
 
-        $values = array_merge(
-            array($this->config['password']),
-            $this->config['roles']
-        );
+        $values = array();
+        foreach ($this->config['users'] as $user) {
+            foreach ($user as $key => $value) {
+                switch ($key) {
+                    // We don't need to validate root, a boolean value.
+                    case 'root':
+                        continue;
+                    // roles should be an non-associative array of role name values.
+                    case 'roles':
+                        $values = array_merge($values, $value);
+                        break;
+                    // All other values should be validated.
+                    default:
+                        $values[] = $value;
+                }
+            }
+        }
+
+        // If the defaultPass key is set, validate this too.
+        if (isset($this->config['defaultPass'])) {
+            $values = array_merge(
+                array($this->config['defaultPass']),
+                $values
+            );
+        }
 
         foreach ($values as $value) {
             $present = array_filter($chars, function ($char) use ($value) {
