@@ -84,7 +84,7 @@ class DrupalUserRegistryTest extends \Codeception\TestCase\Test
     /**
      * @dataProvider charData
      */
-    public function testConstructorThrowsExceptionIfBadCharsUsed($char, $role, $expected)
+    public function testCtrThrowsExceptionIfBadCharsUsedOnWin($role, $expected)
     {
         if ($expected) {
             $this->setExpectedException('\Codeception\Exception\ModuleConfig');
@@ -92,10 +92,7 @@ class DrupalUserRegistryTest extends \Codeception\TestCase\Test
 
         $config = array(
             "users" => array(
-                $role => array(
-                    "name" => $role,
-                    "pass" => $char,
-                ),
+                "admin" => $role
             ),
         );
 
@@ -113,18 +110,18 @@ class DrupalUserRegistryTest extends \Codeception\TestCase\Test
     }
 
     /**
+     * flibble
+     *
      * @dataProvider charData
      */
-    public function testConstructorDoesNotThrowExceptionIfBadCharsUsedOnLinux($char, $role)
+    public function testConstructorAcceptsAnyCharOnLinux($role)
     {
         $config = array(
             "users" => array(
-                $role => array(
-                    "name" => $role,
-                    "pass" => $char,
-                ),
+                "admin" => $role,
             ),
         );
+
         // Mock the class we are testing as we need to mock isWindows method.
         // No other methods are mocked.
         $mock = $this->getMockBuilder('Codeception\Module\DrupalUserRegistry')
@@ -139,7 +136,7 @@ class DrupalUserRegistryTest extends \Codeception\TestCase\Test
     }
 
     /**
-     * Provide data for testConstructorThrowsExceptionIfBadCharsUsed
+     * Provide data for testConstructorThrowsExceptionIfBadCharsUsed*
      *
      * @return array
      *  First element is a password, 2nd is role, the 3rd is whether it should
@@ -147,14 +144,31 @@ class DrupalUserRegistryTest extends \Codeception\TestCase\Test
      */
     public function charData()
     {
-        return array(
-            array('!', 'admin', true),
-            array('"', 'admin', true),
-            array('%', 'admin', true),
-            array('a', 'admin!', true),
-            array('a', 'admin"', true),
-            array('a', 'admin%', true),
-            array('a', 'admin', false),
+        $fields = array("name", "email", "pass", "roles");
+        $chars = array(
+            '!' => true,
+            '%' => true,
+            '"' => true,
+            "a" => false
         );
+
+        $params = array();
+
+        foreach ($fields as $field) {
+            foreach ($chars as $char => $expected) {
+                $params["$char as $field"] = array(
+                    array(
+                        "name" => "admin",
+                        "email" => "admin@example.com",
+                        "pass" => "password",
+                        "roles" => array("admin"),
+                        $field => $field == "roles" ? array($char) : $char,
+                    ),
+                    $expected
+                );
+            }
+        }
+
+        return $params;
     }
 }
