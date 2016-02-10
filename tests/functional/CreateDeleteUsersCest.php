@@ -1,7 +1,5 @@
 <?php
 
-use Codeception\Module\Drupal\UserRegistry\Storage\ModuleConfigStorage;
-use Codeception\Module\DrupalUserRegistry;
 use Codeception\Util\Fixtures;
 
 /**
