@@ -160,7 +160,10 @@ class DrupalUserRegistry extends Module
     }
 
     /**
-     * Get a list of roles available on the site.
+     * Get a list of roles in the user registry.
+     *
+     * This does not necessarily represent all the roles on the site unless
+     * they have been configured as such.
      *
      * @return array
      *   List of roles expected to be available on this site.
