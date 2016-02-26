@@ -130,18 +130,29 @@ class DrupalUserRegistry extends Module
     /**
      * Returns a user account object for $role.
      *
-     * @param string $role
-     *   The returned user will be in this role.
+     * @param mixed $role
+     *   A string, or an array of strings containing the role names.
+     *   The user must have these (and only these) roles.
      *
      * @return DrupalTestUser|bool
-     *   The first DrupalTestUser to have the requested role, or false if no
-     *   user has that role.
+     *   The DrupalTestUser to have all the requested role(s), or false if no
+     *   user has that role or roles.
      */
     public function getUserByRole($role)
     {
+        if (!is_array($role)) {
+            $role = array($role);
+        }
+
         foreach ($this->drupalTestUsers as $user) {
-            if (isset($user->roles) && in_array($role, $user->roles)) {
-                return $user;
+            if (isset($user->roles)) {
+                $user_roles = $user->roles;
+                sort($user_roles);
+                sort($role);
+
+                if ($role == $user_roles) {
+                    return $user;
+                }
             }
         }
 

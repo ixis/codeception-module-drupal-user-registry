@@ -97,8 +97,30 @@ class DrupalUserRegistryApiTest extends \Codeception\TestCase\Test
     public function testGetUserByRole()
     {
         $this->initialise();
-        $expected = new DrupalTestUser("test.administrator", "foo", "administrator");
-        $this->assertTestUsersEqual($expected, $this->module->getUserByRole("administrator"));
+        $expected = new DrupalTestUser("test.administrator", "foo", array("administrator", "editor"));
+        $this->assertTestUsersEqual($expected, $this->module->getUserByRole(array("administrator", "editor")));
+    }
+
+    /**
+     * Test getUserByRole() - it should not return the DrupalTestUser if the exact roles are not specified.
+     *
+     * @group api
+     */
+    public function testGetUserByRoleDoesNotReturnUserWhenOnlySomeRolesMatch()
+    {
+        $this->initialise();
+        $this->assertFalse($this->module->getUserByRole("administrator"));
+    }
+
+    /**
+     * Test getUserByRole() - it should not return the DrupalTestUser if the exact roles are not specified.
+     *
+     * @group api
+     */
+    public function testGetUserByRoleDoesNotReturnUserWhenUserDoesNotHaveAllRolesSpecified()
+    {
+        $this->initialise();
+        $this->assertFalse($this->module->getUserByRole(array("administrator", "editor", "moderator")));
     }
 
     /**
