@@ -59,7 +59,7 @@ class CommandCest
         // @todo Configs are a bit muxed ip...
         $config = Fixtures::get("validModuleConfig");
         foreach ($config["users"] as $user => $userDetails) {
-            $I->seeInDatabase("users", array("name" => $I->getTestUsername($userDetails["name"])));
+            $I->seeInDatabase("users", array("name" => $userDetails["name"]));
         }
     }
 
@@ -83,7 +83,7 @@ class CommandCest
         // @todo Configs are a bit muxed ip...
         $config = Fixtures::get("validModuleConfig");
         foreach ($config["users"] as $user => $userDetails) {
-            $I->dontSeeInDatabase("users", array("name" => $I->getTestUsername($userDetails["name"])));
+            $I->dontSeeInDatabase("users", array("name" => $userDetails["name"]));
         }
     }
 }
