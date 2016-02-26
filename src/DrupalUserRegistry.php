@@ -64,7 +64,7 @@ class DrupalUserRegistry extends Module
      * @var array
      *   Required configuration.
      */
-    protected $requiredFields = ['roles', 'password'];
+    protected $requiredFields = ['users'];
 
     /**
      * @var TestUserManagerInterface
@@ -124,59 +124,81 @@ class DrupalUserRegistry extends Module
      */
     public function getUser($name)
     {
-        foreach ($this->drupalTestUsers as $drupalTestUser) {
-            if ($drupalTestUser->name == $name) {
-                return $drupalTestUser;
+        return isset($this->drupalTestUsers[$name]) ? $this->drupalTestUsers[$name] : false;
+    }
+
+    /**
+     * Returns a user account object for $role.
+     *
+     * @param mixed $role
+     *   A string, or an array of strings containing the role names.
+     *   The user must have these (and only these) roles.
+     *
+     * @return DrupalTestUser|bool
+     *   The DrupalTestUser to have all the requested role(s), or false if no
+     *   user has that role or roles.
+     */
+    public function getUserByRole($role)
+    {
+        if (!is_array($role)) {
+            $role = array($role);
+        }
+
+        foreach ($this->drupalTestUsers as $user) {
+            if (isset($user->roles)) {
+                $user_roles = $user->roles;
+                sort($user_roles);
+                sort($role);
+
+                if ($role == $user_roles) {
+                    return $user;
+                }
             }
         }
+
         return false;
     }
 
     /**
-     * Returns a user account object for $role
+     * Get a list of roles in the user registry.
      *
-     * @param string $role
-     *   The returned user will be in this role.
-     *
-     * @return DrupalTestUser
-     */
-    public function getUserByRole($role)
-    {
-        return $this->drupalTestUsers[$role];
-    }
-
-    /**
-     * Get a list of roles available on the site.
+     * This does not necessarily represent all the roles on the site unless
+     * they have been configured as such.
      *
      * @return array
      *   List of roles expected to be available on this site.
      */
     public function getRoles()
     {
-        $roles = $this->drupalTestUsers;
-        if (array_key_exists(self::DRUPAL_ROOT_USER_USERNAME, $roles)) {
-            unset($roles[self::DRUPAL_ROOT_USER_USERNAME]);
+        $roles = array();
+
+        // Go through all of the users and collect up the roles.
+        foreach ($this->drupalTestUsers as $user) {
+            if (isset($user->roles)) {
+                foreach ($user->roles as $role) {
+                    $roles[$role] = true;
+                }
+            }
         }
+
         return array_keys($roles);
     }
 
     /**
      * Get the "root" user with  uid 1, if configured.
      *
-     * @return DrupalTestUser
-     *   The configured "root" user.
-     *
-     * @throws ModuleException
+     * @return DrupalTestUser|bool
+     *   The configured "root" user. False if there isn't one.
      */
     public function getRootUser()
     {
-        if (!isset($this->config['root']['username']) || !isset($this->config['root']['password'])) {
-            throw new ModuleException(
-                __CLASS__,
-                "Credentials for the root user (username, password) are not configured."
-            );
+        foreach ($this->drupalTestUsers as $user) {
+            if ($user->isRoot) {
+                return $user;
+            }
         }
-        return new DrupalTestUser($this->config['root']['username'], $this->config['root']['password']);
+
+        return false;
     }
 
     /**
@@ -276,10 +298,31 @@ class DrupalUserRegistry extends Module
 
         $chars = array('!', '%', '"');
 
-        $values = array_merge(
-            array($this->config['password']),
-            $this->config['roles']
-        );
+        $values = array();
+        foreach ($this->config['users'] as $user) {
+            foreach ($user as $key => $value) {
+                switch ($key) {
+                    // We don't need to validate root, a boolean value.
+                    case 'root':
+                        continue;
+                    // roles should be an non-associative array of role name values.
+                    case 'roles':
+                        $values = array_merge($values, $value);
+                        break;
+                    // All other values should be validated.
+                    default:
+                        $values[] = $value;
+                }
+            }
+        }
+
+        // If the defaultPass key is set, validate this too.
+        if (isset($this->config['defaultPass'])) {
+            $values = array_merge(
+                array($this->config['defaultPass']),
+                $values
+            );
+        }
 
         foreach ($values as $value) {
             $present = array_filter($chars, function ($char) use ($value) {

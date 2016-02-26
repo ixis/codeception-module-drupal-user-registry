@@ -109,15 +109,17 @@ class DrushTestUserManager implements TestUserManagerInterface
                 )
             );
 
-            // Add a role, if set.
-            if ($user->roleName != "Authenticated") {
-                $this->runDrush(
-                    sprintf(
-                        "user-add-role %s --name=%s",
-                        escapeshellarg($user->roleName),
-                        escapeshellarg($user->name)
-                    )
-                );
+            // Add user roles, if set.
+            foreach ($user->roles as $role) {
+                if ($role != "Authenticated") {
+                    $this->runDrush(
+                        sprintf(
+                            "user-add-role %s --name=%s",
+                            escapeshellarg($role),
+                            escapeshellarg($user->name)
+                        )
+                    );
+                }
             }
         }
     }

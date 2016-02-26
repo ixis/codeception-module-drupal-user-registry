@@ -36,11 +36,11 @@ class DrupalTestUserTest extends \Codeception\TestCase\Test
         $u = new DrupalTestUser("Test Username", "password");
         $this->assertEquals("Test Username", $u->name);
         $this->assertEquals("password", $u->pass);
-        $this->assertNull($u->roleName);
+        $this->assertEmpty($u->roles);
         $this->assertNull($u->email);
 
-        $u = new DrupalTestUser("Test Username", "password", "role");
-        $this->assertEquals("role", $u->roleName);
+        $u = new DrupalTestUser("Test Username", "password", array("role"));
+        $this->assertContains("role", $u->roles);
         $this->assertNull($u->email);
 
         $u = new DrupalTestUser("Test Username", "password", "role", "email@example.com");
