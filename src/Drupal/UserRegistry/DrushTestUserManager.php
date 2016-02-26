@@ -109,15 +109,17 @@ class DrushTestUserManager implements TestUserManagerInterface
                 )
             );
 
-            // Add a role, if set.
-            if ($user->roleName != "Authenticated") {
-                $this->runDrush(
-                    sprintf(
-                        "user-add-role %s --name=%s",
-                        escapeshellarg($user->roleName),
-                        escapeshellarg($user->name)
-                    )
-                );
+            // Add user roles, if set.
+            foreach ($user->roles as $role) {
+                if ($role != "Authenticated") {
+                    $this->runDrush(
+                        sprintf(
+                            "user-add-role %s --name=%s",
+                            escapeshellarg($role),
+                            escapeshellarg($user->name)
+                        )
+                    );
+                }
             }
         }
     }
@@ -141,11 +143,11 @@ class DrushTestUserManager implements TestUserManagerInterface
      */
     public function deleteUser($user)
     {
-        $this->message("Deleting test user {$user->name} on {$this->alias}.")->writeln();
+        $this->message("Deleting test user '{$user->name}' on {$this->alias}.")->writeln();
         $this->runDrush(
             sprintf(
                 "user-cancel %s --delete-content",
-                $user->name
+                escapeshellarg($user->name)
             )
         );
     }

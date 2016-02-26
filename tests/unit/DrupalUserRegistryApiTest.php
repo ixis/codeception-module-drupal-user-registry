@@ -31,7 +31,7 @@ class DrupalUserRegistryApiTest extends \Codeception\TestCase\Test
      */
     protected function initialise()
     {
-        $this->module = new \Codeception\Module\DrupalUserRegistry();
+        $this->module = new DrupalUserRegistry();
         $this->module->_setConfig(Fixtures::get("validModuleConfig"));
         $this->module->_initialize();
     }
@@ -46,56 +46,29 @@ class DrupalUserRegistryApiTest extends \Codeception\TestCase\Test
     public function testGetRootUser()
     {
         $this->initialise();
-        $config = Fixtures::get("validModuleConfig");
         $rootUser = $this->module->getRootUser();
 
         $this->tester->amGoingTo("check the returned data is as expected");
-        // @todo Convert $config to DrupalTestUser, in order to use assertTestUsersEqual() helper.
-        $this->assertEquals($config["root"]["username"], $rootUser->name, "Usernames did not match.");
-        $this->assertEquals($config["root"]["password"], $rootUser->pass, "Passwords did not match.");
-
-        // Role for root user is always null.
-        $this->assertNull($rootUser->roleName, "Role name was not null.");
+        $this->assertEquals("test.administrator", $rootUser->name, "Usernames did not match.");
+        $this->assertEquals("foo", $rootUser->pass, "Passwords did not match.");
+        $this->assertTrue($rootUser->isRoot, "root user is not flagged as being root");
     }
 
     /**
-     * Test the expected exceptions are thrown when the module is not configured enough to uset getRootUser()
+     * Test getRootUser() returns false when there is no root user configured.
      *
      * @group api
      */
-    public function testGetRootUserThrowsExceptionWhenUsernameNotConfigured()
+    public function testGetRootUserReturnsFalseWhenNotConfigured()
     {
-        $this->getRootUserMisconfigure(["username"]);
-        $this->getRootUserMisconfigure(["password"]);
-        $this->getRootUserMisconfigure(["username", "password"]);
-    }
-
-    /**
-     * Helper for testGetRootUserThrowsExceptionWhenUsernameNotConfigured()
-     *
-     * @param array $keysToUnset
-     *   List of keys to unset from $config["root"] array.
-     *
-     * @throws \Codeception\Exception\Module
-     */
-    protected function getRootUserMisconfigure($keysToUnset)
-    {
-        // Grab a valid module configuration but remove the root user's username.
+        // Grab a valid module configuration but remove any configured root user.
         $config = Fixtures::get("validModuleConfig");
+        unset($config["users"]["administrator"]["root"]);
 
-        foreach ($keysToUnset as $keyToUnset) {
-            unset($config["root"][$keyToUnset]);
-        }
-
-        $this->module = new \Codeception\Module\DrupalUserRegistry();
+        $this->module = new DrupalUserRegistry();
         $this->module->_setConfig($config);
         $this->module->_initialize();
-
-        $this->setExpectedException(
-            '\Codeception\Exception\Module',
-            "Credentials for the root user (username, password) are not configured."
-        );
-        $this->module->getRootUser();
+        $this->assertFalse($this->module->getRootUser(), "getRootUser() did not return false");
     }
 
     /**
@@ -107,7 +80,7 @@ class DrupalUserRegistryApiTest extends \Codeception\TestCase\Test
     {
         $this->initialise();
 
-        $expected = new DrupalTestUser("test.administrator", "test123!", "administrator");
+        $expected = new DrupalTestUser("test.administrator", "foo", array("administrator"));
         $this->assertTestUsersEqual($expected, $this->module->getUser("test.administrator"));
 
         $this->assertFalse(
@@ -124,8 +97,30 @@ class DrupalUserRegistryApiTest extends \Codeception\TestCase\Test
     public function testGetUserByRole()
     {
         $this->initialise();
-        $expected = new DrupalTestUser("test.administrator", "test123!", "administrator");
-        $this->assertTestUsersEqual($expected, $this->module->getUserByRole("administrator"));
+        $expected = new DrupalTestUser("test.administrator", "foo", array("administrator", "editor"));
+        $this->assertTestUsersEqual($expected, $this->module->getUserByRole(array("administrator", "editor")));
+    }
+
+    /**
+     * Test getUserByRole() - it should not return the DrupalTestUser if the exact roles are not specified.
+     *
+     * @group api
+     */
+    public function testGetUserByRoleDoesNotReturnUserWhenOnlySomeRolesMatch()
+    {
+        $this->initialise();
+        $this->assertFalse($this->module->getUserByRole("administrator"));
+    }
+
+    /**
+     * Test getUserByRole() - it should not return the DrupalTestUser if the exact roles are not specified.
+     *
+     * @group api
+     */
+    public function testGetUserByRoleDoesNotReturnUserWhenUserDoesNotHaveAllRolesSpecified()
+    {
+        $this->initialise();
+        $this->assertFalse($this->module->getUserByRole(array("administrator", "editor", "moderator")));
     }
 
     /**
@@ -136,7 +131,7 @@ class DrupalUserRegistryApiTest extends \Codeception\TestCase\Test
     public function testGetRoles()
     {
         $this->initialise();
-        $expected = ["administrator", "editor", "moderator", "Authenticated"];
+        $expected = ["administrator", "editor", "moderator"];
         $this->assertEquals($expected, $this->module->getRoles());
 
     }

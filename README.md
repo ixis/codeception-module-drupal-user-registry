@@ -3,7 +3,7 @@ Drupal User Registry
 
 ## A Codeception module for managing test users
 
-[![Build Status](https://travis-ci.org/ixis/codeception-module-drupal-user-registry.svg?branch=feature/add-tests)](https://travis-ci.org/ixis/codeception-module-drupal-user-registry) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ixis/codeception-module-drupal-user-registry/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ixis/codeception-module-drupal-user-registry/?branch=master) [![Latest Stable Version](https://poser.pugx.org/pfaocle/codeception-module-drupal-user-registry/v/stable.svg)](https://packagist.org/packages/pfaocle/codeception-module-drupal-user-registry) [![Latest unstable version](https://poser.pugx.org/pfaocle/codeception-module-drupal-user-registry/v/unstable.svg)](https://packagist.org/packages/pfaocle/codeception-module-drupal-user-registry) [![Total Downloads](https://poser.pugx.org/pfaocle/codeception-module-drupal-user-registry/downloads)](https://packagist.org/packages/pfaocle/codeception-module-drupal-user-registry) [![License](https://poser.pugx.org/pfaocle/codeception-module-drupal-user-registry/license.svg)](https://packagist.org/packages/pfaocle/codeception-module-drupal-user-registry)
+[![Build Status](https://travis-ci.org/ixis/codeception-module-drupal-user-registry.svg?branch=feature/add-tests)](https://travis-ci.org/ixis/codeception-module-drupal-user-registry) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ixis/codeception-module-drupal-user-registry/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ixis/codeception-module-drupal-user-registry/?branch=master) [![Latest Stable Version](https://poser.pugx.org/ixis/codeception-module-drupal-user-registry/v/stable.svg)](https://packagist.org/packages/ixis/codeception-module-drupal-user-registry) [![Latest unstable version](https://poser.pugx.org/ixis/codeception-module-drupal-user-registry/v/unstable.svg)](https://packagist.org/packages/ixis/codeception-module-drupal-user-registry) [![Total Downloads](https://poser.pugx.org/ixis/codeception-module-drupal-user-registry/downloads)](https://packagist.org/packages/ixis/codeception-module-drupal-user-registry) [![License](https://poser.pugx.org/ixis/codeception-module-drupal-user-registry/license.svg)](https://packagist.org/packages/ixis/codeception-module-drupal-user-registry)
 
 _Drupal User Registry_ is a [Codeception module](http://codeception.com/addons) for managing test users on [Drupal](https://www.drupal.org/) sites. It can be configured to automatically create users before and delete users after a suite run.
 
@@ -13,6 +13,10 @@ It also allows the use of the following statements in tests:
 // Returns a DrupalTestUser object representing the test user available for
 // this role.
 $user = $I->getUserByRole($roleName);
+
+// Returns a DrupalTestUser object representing the test user available for
+// exactly these roles.
+$user = $I->getUserByRole([$roleName1, $roleName2]);
 
 // Returns a DrupalTestUser object representing the user, or false if no users
 // were found. Note this will only return a user defined and managed by this
@@ -41,22 +45,22 @@ $I->getLoggedInUser();
 $I->removeLoggedInUser();
 ```
 
-All methods available to the Actor object `$I` are defined in this module's [public API](https://github.com/pfaocle/codeception-module-drupal-user-registry/blob/master/API.md).
+All methods available to the Actor object `$I` are defined in this module's [public API](https://github.com/ixis/codeception-module-drupal-user-registry/blob/master/API.md).
 
-The [DrupalTestUser](https://github.com/pfaocle/codeception-module-drupal-user-registry/blob/master/src/Drupal/UserRegistry/DrupalTestUser.php) class is a very minimal representation of a Drupal user account and can be used as part of a login procedure defined in, for example, a StepObject or PageObject.
+The [DrupalTestUser](https://github.com/ixis/codeception-module-drupal-user-registry/blob/master/src/Drupal/UserRegistry/DrupalTestUser.php) class is a very minimal representation of a Drupal user account and can be used as part of a login procedure defined in, for example, a StepObject or PageObject.
 
 This module currently uses Drush and Drush aliases to create, delete and add roles to user accounts. Note that the `--delete-content` option is used when deleting users, so any content created by that user account will also be removed.
 
 
 ## Installation
 
-This module is available on [Packagist](https://packagist.org/packages/pfaocle/codeception-module-drupal-user-registry) and can be installed with Composer:
+This module is available on [Packagist](https://packagist.org/packages/ixis/codeception-module-drupal-user-registry) and can be installed with Composer:
 
 ```json
 {
     "require": {
         "codeception/codeception": "2.0.*",
-        "ixis/codeception-module-drupal-user-registry": "dev-master"
+        "ixis/codeception-module-drupal-user-registry": "~0.2.0"
     }
 }
 ```
@@ -77,40 +81,41 @@ modules:
         PhpBrowser:
             url: 'http://localhost/myapp/'
         DrupalUserRegistry:
-            roles: ['administrator', 'editor', 'sub editor', 'lowly-user', 'authenticated']  # A list of user roles.
-            emails:
-                administrator: 'admin@example.com'
-                editor: 'editor@example.com'
-            password: 'test123!'         # The password to use for all test users.
+            defaultPass: "foobar"
+            users:
+                administrator:
+                    name: administrator
+                    email: admin@example.com
+                    pass: "foo%^&&"
+                    roles: [ administrator, editor ]
+                    root: true
+                editor:
+                    name: editor
+                    email: editor@example.com
+                    roles: [ editor, sub-editor ]
+                "sub editor":
+                    name: "sub editor"
+                    email: "sub.editor@example.com"
+                    roles: [ sub-editor ]
+                authenticated:
+                    name: authenticated
+                    email: authenticated@example.com
+                    roles: [ "authenticated user" ]
             create: true                 # Whether to create all defined test users at the start of the suite.
             delete: true                 # Whether to delete all defined test users at the end of the suite.
             drush-alias: '@mysite.local' # The Drush alias to use when managing users via DrushTestUserManager.
-            root:
-                username: root           # Username for user with uid 1.
-                password: root           # Password for user with uid 1.
             username-prefix: robot       # Use this string instead of the default 'test' for prefixing test usernames.
 ```
 
 ### Required and optional configuration
 
-Configured values for `roles` and `password` are required. `drush-alias` is only currently required as [DrushTestUserManager](https://github.com/pfaocle/codeception-module-drupal-user-registry/blob/master/src/Drupal/UserRegistry/DrushTestUserManager.php) is the only class available for managing (creating/deleting) users.
+Configured values for `users` are required. `drush-alias` is only currently required as [DrushTestUserManager](https://github.com/ixis/codeception-module-drupal-user-registry/blob/master/src/Drupal/UserRegistry/DrushTestUserManager.php) is the only class available for managing (creating/deleting) users.
 
 Other optional configuration includes:
 
 * `create` and `delete` are assumed to be `false` if not set.
-* `emails` can optionally be set for any created test users, for use in tests.
-* The `root` key and its `username` and `password` are only required if `$I->getRootUser()` is used.
-* `username-prefix` can be used to set the prefix used for test users' usernames, instead of the default 'test'.
-
-### Derivate usernames
-
-Note that only a list of user roles is defined - no specific usernames. This is because we only need a single representative user account for a given role performing an acceptance test. Each role defined in configuration maps directly to a single user with username derived from the role name. For example, the configuration above would result in the following usernames: _test.administrator_, _test.editor_, _test.sub.editor_, _test.lowly.user_, _test.authenticated_.
-
-Derivative usernames are (by default) prefixed with _test._ and have any character in the role name matching the regex `/(\s|-)/` (i.e. whitespace and hyphens) replaced with a full-stop character (`.`). The test username prefix can be configured to something other than this default using the `username-prefix` key: see _Example suite configuration_, above.
-
-
-**Caution:** no test user is created when the "root" user is configured. If the `getRootUser()` method is to be used the username and password will need to be set to working credentials, **stored in plain text**.
-
+* `defaultPass` can be used to set a default test user password in case you don't want to add a password for each user. It can still be overridden on a per-user basis.
+* The `root` key can be added for any user (preferably just one) to indicate it is the root user (uid 1).
 
 ## Troubleshooting
 
@@ -161,6 +166,12 @@ To run both suites:
 
 
 ## Contribute
+
+This module's code is managed with [git-flow (AVH Edition)](https://github.com/petervanderdoes/gitflow-avh).
+Releases are made on the **master** branch and should be tagged using
+[semantic versioning](http://semver.org/) and the format vx.y.z, e.g. v1.2.3
+
+Pull requests should be made to the **develop** branch.
 
 - Issue tracker: https://github.com/ixis/codeception-module-drupal-user-registry/issues
 - Source code: https://github.com/ixis/codeception-module-drupal-user-registry

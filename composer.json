@@ -5,8 +5,16 @@
     "authors": [
         {
             "name": "Paul Byrne",
-            "email": "code@pfaocle.co.uk",
-            "homepage": "http://pfaocle.co.uk/"
+            "email": "paul.byrne@ixis.co.uk",
+            "homepage": "http://www.ixis.co.uk/"
+        },
+        {
+            "name": "Chris Cohen"
+        },
+        {
+            "name": "Andy Rigby",
+            "email": "andy.rigby@ixis.co.uk",
+            "homepage": "http://www.ixis.co.uk/"
         }
     ],
 
