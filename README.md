@@ -56,7 +56,7 @@ This module is available on [Packagist](https://packagist.org/packages/ixis/code
 {
     "require": {
         "codeception/codeception": "2.0.*",
-        "ixis/codeception-module-drupal-user-registry": "~0.1.1"
+        "ixis/codeception-module-drupal-user-registry": "~0.2.0"
     }
 }
 ```
@@ -165,7 +165,7 @@ To run both suites:
 
 This module's code is managed with [git-flow (AVH Edition)](https://github.com/petervanderdoes/gitflow-avh).
 Releases are made on the **master** branch and should be tagged using
-[semantic versioning](http://semver.org/) and the format vx.y.z, e.g. v0.1.0
+[semantic versioning](http://semver.org/) and the format vx.y.z, e.g. v1.2.3
 
 Pull requests should be made to the **develop** branch.
 
