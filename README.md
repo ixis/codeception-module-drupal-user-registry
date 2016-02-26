@@ -14,6 +14,10 @@ It also allows the use of the following statements in tests:
 // this role.
 $user = $I->getUserByRole($roleName);
 
+// Returns a DrupalTestUser object representing the test user available for
+// exactly these roles.
+$user = $I->getUserByRole([$roleName1, $roleName2]);
+
 // Returns a DrupalTestUser object representing the user, or false if no users
 // were found. Note this will only return a user defined and managed by this
 // module, it will not return information about arbitrary accounts on the site
