@@ -100,7 +100,6 @@ modules:
             create: true                 # Whether to create all defined test users at the start of the suite.
             delete: true                 # Whether to delete all defined test users at the end of the suite.
             drush-alias: '@mysite.local' # The Drush alias to use when managing users via DrushTestUserManager.
-            username-prefix: robot       # Use this string instead of the default 'test' for prefixing test usernames.
 ```
 
 ### Required and optional configuration
