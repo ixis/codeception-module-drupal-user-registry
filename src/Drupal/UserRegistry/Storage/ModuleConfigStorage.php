@@ -50,17 +50,6 @@ class ModuleConfigStorage implements StorageInterface
             $this->yaml = $config;
             $this->load();
         }
-
-        if (isset($config['username-prefix'])) {
-            if (strlen($config['username-prefix']) < 4) {
-                throw new ConfigException(sprintf(
-                    "Drupal username prefix should contain at least 4 characters (%s).",
-                    $config['username-prefix']
-                ));
-            } else {
-                $this->drupalUsernamePrefix = (string) $config['username-prefix'];
-            }
-        }
     }
 
     /**
