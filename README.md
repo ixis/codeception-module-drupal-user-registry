@@ -60,7 +60,7 @@ This module is available on [Packagist](https://packagist.org/packages/ixis/code
 {
     "require": {
         "codeception/codeception": "2.0.*",
-        "ixis/codeception-module-drupal-user-registry": "~0.2.0"
+        "ixis/codeception-module-drupal-user-registry": "~0.2.1"
     }
 }
 ```
