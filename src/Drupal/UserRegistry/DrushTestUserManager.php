@@ -93,13 +93,24 @@ class DrushTestUserManager implements TestUserManagerInterface
         Debug::debug("Trying to create test user '{$user->name}' with email '{$email}' on '{$this->alias}'.");
 
         if ($this->userExists($user->name)) {
-            $this->message(
-                "User '{$user->name}' already exists on {$this->alias}, skipping.",
-                new Output(array())
-            )->writeln();
+            if (!$user->isRoot) {
+                $this->message(
+                    "User '{$user->name}' already exists on {$this->alias}, skipping.",
+                    new Output(array())
+                )->writeln();
+            }
         } else {
+            // Do not try to create the root user. This should exist as UID=1.
+            if ($user->isRoot) {
+                $this->message(
+                    "Warning: The user '{$user->name}' specified as 'root' " .
+                    "does not exist on {$this->alias}. The root user should " .
+                    "be the user with UID=1"
+                );
+                return;
+            }
             // Create the user.
-            $this->message("Creating test user '{$user->name}' on {$this->alias}.", new Output(array()))->writeln();
+            $this->message("Creating test user '{$user->name}' on {$this->alias}.")->writeln();
             $this->runDrush(
                 sprintf(
                     "user-create %s --mail=%s --password=%s",
@@ -143,6 +154,10 @@ class DrushTestUserManager implements TestUserManagerInterface
      */
     public function deleteUser($user)
     {
+        if ($user->isRoot) {
+            return;
+        }
+
         $this->message("Deleting test user '{$user->name}' on {$this->alias}.")->writeln();
         $this->runDrush(
             sprintf(

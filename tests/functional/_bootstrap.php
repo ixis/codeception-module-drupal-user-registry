@@ -15,7 +15,6 @@ $mockValidModuleConfig = array(
             "email" => "test.administrator@example.com",
             "pass" => "foo",
             "roles" => array("administrator", "editor"),
-            "root" => true,
         ),
         "editor" => array(
             "name" => "test.editor",
@@ -30,6 +29,22 @@ $mockValidModuleConfig = array(
             "roles" => array("moderator"),
         ),
     ),
-    "drush-alias" => "@d7.local",
+    "drush-alias" => "@dr7.vagrant.remote",
 );
 Fixtures::add("validModuleConfig", $mockValidModuleConfig);
+
+$mockValidModuleConfigWithRoot = array(
+    "create" => true,
+    "delete" => true,
+    "users" => array(
+        "root" => array(
+            "name" => "root",
+            "email" => "test.root@example.com",
+            "pass" => "foo",
+            "roles" => array(),
+            "root" => true,
+        ),
+    ),
+    "drush-alias" => "@dr7.vagrant.remote",
+);
+Fixtures::add("validModuleConfigWithRoot", $mockValidModuleConfigWithRoot);
