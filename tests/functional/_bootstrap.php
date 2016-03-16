@@ -15,7 +15,6 @@ $mockValidModuleConfig = array(
             "email" => "test.administrator@example.com",
             "pass" => "foo",
             "roles" => array("administrator", "editor"),
-            "root" => true,
         ),
         "editor" => array(
             "name" => "test.editor",

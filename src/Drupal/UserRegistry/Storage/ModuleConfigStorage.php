@@ -2,8 +2,8 @@
 
 namespace Codeception\Module\Drupal\UserRegistry\Storage;
 
+use Codeception\Exception\ConfigurationException;
 use Codeception\Module\Drupal\UserRegistry\DrupalTestUser;
-use Codeception\Exception\Configuration as ConfigException;
 use BadMethodCallException;
 
 /**
@@ -40,12 +40,12 @@ class ModuleConfigStorage implements StorageInterface
      * @param array $config
      *   Array containing the DrupalUserRegistry module configuration.
      *
-     * @throws \Codeception\Exception\Configuration
+     * @throws \Codeception\Exception\ConfigurationException
      */
     public function __construct($config)
     {
         if (!isset($config['users'])) {
-            throw new BadMethodCallException('No "users" property found in yaml configuration.');
+            throw new ConfigurationException('No "users" property found in yaml configuration.');
         } else {
             $this->yaml = $config;
             $this->load();

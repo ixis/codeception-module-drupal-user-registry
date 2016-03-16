@@ -25,13 +25,25 @@ class DrupalUserRegistryApiTest extends \Codeception\TestCase\Test
     protected $module;
 
     /**
+     * @var \Codeception\Lib\ModuleContainer
+     */
+    protected $mockModuleContainer;
+
+    public function _before()
+    {
+        $this->mockModuleContainer = $this->getMockBuilder("\\Codeception\\Lib\\ModuleContainer")
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    /**
      * Don't use _before() as not all the tests require this setup.
      *
      * Note this function can't be called setUp()...
      */
     protected function initialise()
     {
-        $this->module = new DrupalUserRegistry();
+        $this->module = new DrupalUserRegistry($this->mockModuleContainer);
         $this->module->_setConfig(Fixtures::get("validModuleConfig"));
         $this->module->_initialize();
     }
@@ -65,7 +77,7 @@ class DrupalUserRegistryApiTest extends \Codeception\TestCase\Test
         $config = Fixtures::get("validModuleConfig");
         unset($config["users"]["administrator"]["root"]);
 
-        $this->module = new DrupalUserRegistry();
+        $this->module = new DrupalUserRegistry($this->mockModuleContainer);
         $this->module->_setConfig($config);
         $this->module->_initialize();
         $this->assertFalse($this->module->getRootUser(), "getRootUser() did not return false");

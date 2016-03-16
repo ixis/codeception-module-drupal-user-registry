@@ -31,7 +31,10 @@ class CreateDeleteUsersCest
      */
     public function _before(FunctionalTester $I)
     {
-        $this->module = new \Codeception\Module\DrupalUserRegistry();
+        $mockGenerator = new PHPUnit_Framework_MockObject_Generator();
+        $mockContainer = $mockGenerator->getMock("\\Codeception\\Lib\\ModuleContainer", array(), array(), "", false);
+
+        $this->module = new \Codeception\Module\DrupalUserRegistry($mockContainer);
         $this->moduleConfig = Fixtures::get("validModuleConfig");
         $this->module->_setConfig($this->moduleConfig);
     }

@@ -2,7 +2,6 @@
 
 namespace Codeception\Module;
 
-use Codeception\Exception\Module as ModuleException;
 use Codeception\Exception;
 use Codeception\Module;
 use Codeception\Module\Drupal\UserRegistry\DrupalTestUser;
@@ -229,7 +228,7 @@ class DrupalUserRegistry extends Module
      * @param string $op
      *   The operation to perform, either "create" or "delete".
      *
-     * @throws \Codeception\Exception\Module
+     * @throws \Codeception\Exception\ModuleException
      */
     private function manageTestUsers($op)
     {
@@ -242,7 +241,7 @@ class DrupalUserRegistry extends Module
                 $msg = "Deleting test users.";
                 break;
             default:
-                throw new \Codeception\Exception\Module(__CLASS__, "Invalid operation $op when managing users.");
+                throw new \Codeception\Exception\ModuleException(__CLASS__, "Invalid operation $op when managing users.");
         }
 
         // Only act if we're configured to to do.
@@ -330,7 +329,7 @@ class DrupalUserRegistry extends Module
             });
 
             if (!empty($present)) {
-                throw new Exception\ModuleConfig(
+                throw new Exception\ModuleConfigException(
                     get_class($this),
                     sprintf(
                         "\nOn windows, the characters %s cannot be used for %s\n\n",

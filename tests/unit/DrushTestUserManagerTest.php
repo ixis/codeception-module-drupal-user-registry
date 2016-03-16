@@ -51,7 +51,7 @@ class DrushTestUserManagerTest extends \Codeception\TestCase\Test
     public function testIfExceptionThrownWhenConfigurationIsEmpty()
     {
         $this->setExpectedException(
-            '\Codeception\Exception\Configuration',
+            '\Codeception\Exception\ConfigurationException',
             "Please configure the drush-alias setting in your suite configuration."
         );
         new DrushTestUserManager(array(), $this->storage);
@@ -63,7 +63,7 @@ class DrushTestUserManagerTest extends \Codeception\TestCase\Test
     public function testIfExceptionThrownWhenConfigurationIsMissingDrushAlias()
     {
         $this->setExpectedException(
-            '\Codeception\Exception\Configuration',
+            '\Codeception\Exception\ConfigurationException',
             "Please configure the drush-alias setting in your suite configuration."
         );
         new DrushTestUserManager(Fixtures::get("invalidModuleConfig"), $this->storage);
