@@ -163,6 +163,32 @@ class CreateDeleteUsersCest
     }
 
     /**
+     * Test the root user is not deleted.
+     *
+     * @param FunctionalTester $I
+     *   The Actor or StepObject being used to test.
+     */
+    public function testRootUserIsNotDeleted(FunctionalTester $I)
+    {
+        $this->module->_setConfig(Fixtures::get("validModuleConfigWithRoot"));
+        $this->module->_initialize();
+
+        // Double check the module knows about root.
+        $root = $this->module->getRootUser();
+        PHPUnit_Framework_Assert::assertNotFalse($root);
+        PHPUnit_Framework_Assert::assertTrue($root->isRoot);
+
+        // Check root exists in the db (loaded via _data/d7_minimal.sql).
+        $I->seeInDatabase("users", array("uid" => 1, "name" => "root"));
+
+        // Run the cleanup.
+        $this->module->_afterSuite();
+
+        // Check root still exists.
+        $I->seeInDatabase("users", array("uid" => 1, "name" => "root"));
+    }
+
+    /**
      * Return a mapping of username => test user $uid from the database.
      */
     protected function usernameToTestUserUidMap()

@@ -26,4 +26,29 @@ class ModuleConfigStorageTest extends \Codeception\TestCase\Test
             new ModuleConfigStorage(Fixtures::get("validModuleConfig"))
         );
     }
+
+    /**
+     * @expectedException \Codeception\Exception\ConfigurationException
+     */
+    public function testRootUserCannotBeDefinedMoreThanOnce()
+    {
+        $config = array(
+            "users" => array(
+                "root" => array(
+                    "name" => "test.root",
+                    "email" => "test.root@example.com",
+                    "root" => true,
+                    "roles" => array(),
+                ),
+                "root2" => array(
+                    "name" => "test.root2",
+                    "email" => "test.root2@example.com",
+                    "root" => true,
+                    "roles" => array(),
+                ),
+            ),
+        );
+
+        $config = new ModuleConfigStorage($config);
+    }
 }
