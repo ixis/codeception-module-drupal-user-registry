@@ -27,10 +27,6 @@
         "codegyre/robo": "~0.5.2"
     },
 
-    "conflict": {
-        "codeception/codeception": ">=2.1"
-    },
-
     "autoload": {
         "psr-4": {
             "Codeception\\Module\\": "src"
