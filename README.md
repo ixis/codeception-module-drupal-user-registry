@@ -114,7 +114,7 @@ Other optional configuration includes:
 
 * `create` and `delete` are assumed to be `false` if not set.
 * `defaultPass` can be used to set a default test user password in case you don't want to add a password for each user. It can still be overridden on a per-user basis.
-* The `root` key can be added for any user (preferably just one) to indicate it is the root user (uid 1).
+* The `root` key can be added for any user (but only one) to indicate it is the root user (uid 1). The user should already exist in the database and will not be created.
 
 ## Troubleshooting
 
