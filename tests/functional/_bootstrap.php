@@ -45,6 +45,6 @@ $mockValidModuleConfigWithRoot = array(
             "root" => true,
         ),
     ),
-    "drush-alias" => "@dr7.vagrant.remote",
+    "drush-alias" => "@d7.local",
 );
 Fixtures::add("validModuleConfigWithRoot", $mockValidModuleConfigWithRoot);
