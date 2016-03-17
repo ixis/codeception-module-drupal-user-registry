@@ -65,7 +65,7 @@ This module is available on [Packagist](https://packagist.org/packages/ixis/code
 }
 ```
 
-Drupal User Registry minimally requires Codeception 2.0 and PHP 5.4
+Drupal User Registry minimally requires Codeception 2.0 and PHP 5.4; note also that versions up to v0.2.2 are compatible with Codeception 2.0.* only.
 
 
 ## Example suite configuration
