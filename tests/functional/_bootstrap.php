@@ -29,7 +29,7 @@ $mockValidModuleConfig = array(
             "roles" => array("moderator"),
         ),
     ),
-    "drush-alias" => "@dr7.vagrant.remote",
+    "drush-alias" => "@d7.local",
 );
 Fixtures::add("validModuleConfig", $mockValidModuleConfig);
 
