@@ -4,7 +4,6 @@ namespace Codeception\Module\Drupal\UserRegistry\Storage;
 
 use Codeception\Exception\ConfigurationException;
 use Codeception\Module\Drupal\UserRegistry\DrupalTestUser;
-use BadMethodCallException;
 
 /**
  * Class ModuleConfigStorage.
