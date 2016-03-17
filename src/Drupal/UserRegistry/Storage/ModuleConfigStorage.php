@@ -64,6 +64,8 @@ class ModuleConfigStorage implements StorageInterface
             return $this->users;
         }
 
+        $root_is_defined = false;
+
         // Ensure we have yaml to load users from.
         if (empty($this->yaml) || empty($this->yaml['users'])) {
             throw new BadMethodCallException('No yaml has been defined in load() method. Cannot load users.');
@@ -83,7 +85,11 @@ class ModuleConfigStorage implements StorageInterface
 
             // If user is marked as root user, save this to the user object.
             if (isset($item['root']) && $item['root'] == true) {
+                if ($root_is_defined) {
+                    throw new ConfigException("The 'root' user can only be defined once");
+                }
                 $user->isRoot = true;
+                $root_is_defined = true;
             }
 
             // Save the user to the collection.

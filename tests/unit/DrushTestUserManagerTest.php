@@ -160,4 +160,60 @@ class DrushTestUserManagerTest extends \Codeception\TestCase\Test
 
         $mock->deleteUser($user);
     }
+
+    /**
+     * Test createUser() does not create the user defined as root.
+     */
+    public function testCreateUserDoesNotCreateTheUserDefinedAsRoot()
+    {
+        $mock = $this->getMockBuilder('\Codeception\Module\Drupal\UserRegistry\DrushTestUserManager')
+            ->setConstructorArgs(
+                array(
+                    array('drush-alias' => 'dummy'),
+                    $this->storage
+                )
+            )
+            ->setMethods(array("runDrush", "userExists"))
+            ->getMock();
+
+        $mock->expects($this->once())
+            ->method("userExists")
+            ->willReturn(true);
+
+        // This is the test: runDrush should not be called.
+        $mock->expects($this->never())
+            ->method("runDrush")
+            ->with($this->matchesRegularExpression('/create-user/'));
+
+        $user = new DrupalTestUser("root", "password");
+        $user->isRoot = true;
+
+        $mock->createUser($user);
+    }
+
+    /**
+     * Test deleteUser() does not delete the user defined as root.
+     */
+    public function testDeleteUserDoesNotDeleteTheUserDefinedAsRoot()
+    {
+        $mock = $this->getMockBuilder('\Codeception\Module\Drupal\UserRegistry\DrushTestUserManager')
+            ->setConstructorArgs(
+                array(
+                    array('drush-alias' => 'dummy'),
+                    $this->storage
+                )
+            )
+            ->setMethods(array("runDrush", "userExists"))
+            ->getMock();
+
+        // This is the test: runDrush should not be called.
+        $mock->expects($this->never())
+            ->method("runDrush")
+            ->with($this->matchesRegularExpression('/delete-user/'));
+
+        $user = new DrupalTestUser("root", "password");
+        $user->isRoot = true;
+
+        $mock->deleteUser($user);
+    }
 }
