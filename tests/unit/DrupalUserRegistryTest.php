@@ -29,7 +29,11 @@ class DrupalUserRegistryTest extends \Codeception\TestCase\Test
      */
     public function _before()
     {
-        $this->module = new DrupalUserRegistry();
+        $mock = $this->getMockBuilder("\\Codeception\\Lib\\ModuleContainer")
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->module = new DrupalUserRegistry($mock);
     }
     /**
      * Objects of this class should be instantiable.
@@ -59,7 +63,7 @@ class DrupalUserRegistryTest extends \Codeception\TestCase\Test
             "manageTestUsers"
         );
         $this->setExpectedException(
-            '\Codeception\Exception\Module',
+            '\Codeception\Exception\ModuleException',
             "Invalid operation  when managing users."
         );
         $refMethod->invokeArgs($this->module, array(""));
@@ -75,7 +79,7 @@ class DrupalUserRegistryTest extends \Codeception\TestCase\Test
             "manageTestUsers"
         );
         $this->setExpectedException(
-            '\Codeception\Exception\Module',
+            '\Codeception\Exception\ModuleException',
             "Invalid operation not-an-op when managing users."
         );
         $refMethod->invokeArgs($this->module, array("not-an-op"));
@@ -87,7 +91,7 @@ class DrupalUserRegistryTest extends \Codeception\TestCase\Test
     public function testCtrThrowsExceptionIfBadCharsUsedOnWin($role, $expected)
     {
         if ($expected) {
-            $this->setExpectedException('\Codeception\Exception\ModuleConfig');
+            $this->setExpectedException('\Codeception\Exception\ModuleConfigException');
         }
 
         $config = array(
@@ -106,7 +110,11 @@ class DrupalUserRegistryTest extends \Codeception\TestCase\Test
         $mock->method("isWindows")
             ->willReturn(true);
 
-        $mock->__construct($config);
+        $mockContainer = $this->getMockBuilder("\\Codeception\\Lib\\ModuleContainer")
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $mock->__construct($mockContainer, $config);
     }
 
     /**
@@ -132,7 +140,11 @@ class DrupalUserRegistryTest extends \Codeception\TestCase\Test
         $mock->method("isWindows")
             ->willReturn(false);
 
-        $mock->__construct($config);
+        $mockContainer = $this->getMockBuilder("\\Codeception\\Lib\\ModuleContainer")
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $mock->__construct($mockContainer, $config);
     }
 
     /**

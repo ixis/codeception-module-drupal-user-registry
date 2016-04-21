@@ -2,9 +2,8 @@
 
 namespace Codeception\Module\Drupal\UserRegistry\Storage;
 
+use Codeception\Exception\ConfigurationException;
 use Codeception\Module\Drupal\UserRegistry\DrupalTestUser;
-use Codeception\Exception\Configuration as ConfigException;
-use BadMethodCallException;
 
 /**
  * Class ModuleConfigStorage.
@@ -40,12 +39,12 @@ class ModuleConfigStorage implements StorageInterface
      * @param array $config
      *   Array containing the DrupalUserRegistry module configuration.
      *
-     * @throws \Codeception\Exception\Configuration
+     * @throws \Codeception\Exception\ConfigurationException
      */
     public function __construct($config)
     {
         if (!isset($config['users'])) {
-            throw new BadMethodCallException('No "users" property found in yaml configuration.');
+            throw new ConfigurationException('No "users" property found in yaml configuration.');
         } else {
             $this->yaml = $config;
             $this->load();
@@ -68,7 +67,7 @@ class ModuleConfigStorage implements StorageInterface
 
         // Ensure we have yaml to load users from.
         if (empty($this->yaml) || empty($this->yaml['users'])) {
-            throw new BadMethodCallException('No yaml has been defined in load() method. Cannot load users.');
+            throw new ConfigurationException('No yaml has been defined in load() method. Cannot load users.');
         }
 
         // Set up a default password if one was provided.
@@ -86,7 +85,7 @@ class ModuleConfigStorage implements StorageInterface
             // If user is marked as root user, save this to the user object.
             if (isset($item['root']) && $item['root'] == true) {
                 if ($root_is_defined) {
-                    throw new ConfigException("The 'root' user can only be defined once");
+                    throw new ConfigurationException("The 'root' user can only be defined once");
                 }
                 $user->isRoot = true;
                 $root_is_defined = true;

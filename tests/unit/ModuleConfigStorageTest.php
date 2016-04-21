@@ -28,7 +28,7 @@ class ModuleConfigStorageTest extends \Codeception\TestCase\Test
     }
 
     /**
-     * @expectedException \Codeception\Exception\Configuration
+     * @expectedException \Codeception\Exception\ConfigurationException
      */
     public function testRootUserCannotBeDefinedMoreThanOnce()
     {

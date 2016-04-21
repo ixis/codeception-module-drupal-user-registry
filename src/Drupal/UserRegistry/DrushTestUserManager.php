@@ -2,8 +2,8 @@
 
 namespace Codeception\Module\Drupal\UserRegistry;
 
-use Codeception\Exception\Configuration as ConfigurationException;
-use Codeception\Exception\Module as ModuleException;
+use Codeception\Exception\ConfigurationException;
+use Codeception\Exception\ModuleException;
 use Codeception\Lib\Console\Message;
 use Codeception\Lib\Console\Output;
 use Codeception\Module\DrupalUserRegistry;
